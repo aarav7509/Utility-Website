@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — ConvertX</title>
+<meta name="description" content="Learn about ConvertX — the universal currency, unit, and time converter built for everyone, everywhere.">
+<style>
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  }
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+ }
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+ }
+@font-face {
+  font-family: 'Outfit';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  }
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  }
+@font-face {
+  font-family: 'Manrope';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  }
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+ }
+@font-face {
+  font-family: 'Manrope';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+ }
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+ }
+@font-face {
+  font-family: 'Manrope';
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  }
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+ }
+@font-face {
+  font-family: 'Manrope';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+ }
+</style>
+<style>
+  :root {
+    --bg: #0c0c10;
+    --surface: #13131a;
+    --surface2: #1a1a25;
+    --border: #2a2a38;
+    --accent: #c9a84c;
+    --accent2: #e8c97e;
+    --text: #f0ede8;
+    --muted: #8885a0;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 10%, rgba(201,168,76,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 85% 80%, rgba(120,100,200,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(201,168,76,0.03) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body > * { position: relative; z-index: 1; }
+
+  /* ─── HEADER ─── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(12,12,16,0.85);
+    backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo {
+    font-family: 'Manrope', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+
+  .logo span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    color: var(--muted);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 9px 18px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .back-btn:hover {
+    color: var(--text);
+    border-color: var(--accent);
+    background: rgba(201,168,76,0.08);
+  }
+
+  /* ─── MAIN ─── */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+  }
+
+  /* ─── HERO ─── */
+  .page-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 20px;
+    padding: 5px 14px;
+    font-size: 0.75rem;
+    color: var(--accent2);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
+
+  .page-hero {
+    margin-bottom: 56px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-hero h1 {
+    font-family: 'Manrope', serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .page-hero h1 em {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .page-hero p {
+    font-size: 1.1rem;
+    color: #ccc9d4;
+    max-width: 600px;
+    line-height: 1.75;
+  }
+
+  /* ─── MISSION ─── */
+  .mission-box {
+    background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.02));
+    border: 1px solid rgba(201,168,76,0.2);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: 28px 32px;
+    margin-bottom: 56px;
+  }
+
+  .mission-box p {
+    font-family: 'Manrope', serif;
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ─── SECTION TITLES ─── */
+  .section-label {
+    font-size: 0.7rem;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  h2 {
+    font-family: 'Manrope', serif;
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .section-intro {
+    color: #ccc9d4;
+    font-size: 0.97rem;
+    line-height: 1.75;
+    margin-bottom: 32px;
+    max-width: 680px;
+  }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+    margin: 56px 0;
+  }
+
+  /* ─── CONVERTER CARDS ─── */
+  .converter-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    margin-bottom: 56px;
+  }
+
+  .converter-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 26px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+
+  .converter-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .converter-card:hover {
+    border-color: rgba(201,168,76,0.4);
+    transform: translateY(-3px);
+  }
+
+  .converter-card:hover::before { opacity: 1; }
+
+  .card-emoji {
+    font-size: 2.2rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .converter-card h3 {
+    font-family: 'Manrope', serif;
+    font-size: 1.45rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .converter-card p {
+    color: #b0adc0;
+    font-size: 0.88rem;
+    line-height: 1.7;
+  }
+
+  .card-features {
+    list-style: none;
+    margin-top: 16px;
+    padding: 0;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+  }
+
+  .card-features li {
+    font-size: 0.82rem;
+    color: var(--muted);
+    padding: 3px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-features li::before {
+    content: "→";
+    color: var(--accent);
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  /* ─── WHY TOGETHER ─── */
+  .why-together {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px;
+    margin-bottom: 56px;
+  }
+
+  .together-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 28px;
+  }
+
+  @media (max-width: 600px) { .together-grid { grid-template-columns: 1fr; } }
+
+  .together-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+  }
+
+  .together-item .t-icon {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .together-item h4 {
+    font-family: 'Manrope', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: var(--text);
+  }
+
+  .together-item p {
+    font-size: 0.84rem;
+    color: #b0adc0;
+    line-height: 1.65;
+  }
+
+  /* ─── WHY IMPORTANT ─── */
+  .importance-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  .importance-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 22px 24px;
+    transition: border-color 0.2s;
+  }
+
+  .importance-item:hover { border-color: rgba(201,168,76,0.3); }
+
+  .importance-num {
+    font-family: 'Manrope', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: rgba(201,168,76,0.25);
+    line-height: 1;
+    min-width: 36px;
+    flex-shrink: 0;
+  }
+
+  .importance-content h4 {
+    font-family: 'Manrope', serif;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .importance-content p {
+    font-size: 0.88rem;
+    color: #b0adc0;
+    line-height: 1.7;
+  }
+
+  /* ─── STATS ─── */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 56px;
+  }
+
+  @media (max-width: 540px) { .stats-row { grid-template-columns: 1fr; } }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 20px;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: 'Manrope', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* ─── CTA ─── */
+  .cta-box {
+    background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.03));
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: var(--radius);
+    padding: 40px;
+    text-align: center;
+  }
+
+  .cta-box h2 {
+    margin-bottom: 12px;
+  }
+
+  .cta-box p {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 24px;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--accent), #b8932a);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: #0c0c10;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 14px 32px;
+    text-decoration: none;
+    transition: all 0.2s;
+  }
+
+  .cta-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(201,168,76,0.35);
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--accent2); }
+
+  @media (max-width: 600px) {
+    header { padding: 14px 20px; }
+    main { padding: 36px 16px 60px; }
+    footer { padding: 24px 20px; }
+    .why-together { padding: 24px 20px; }
+    .cta-box { padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">⚡</div>
+    Convert<span>X</span>
+  </a>
+  <a href="index.html" class="back-btn">← Back to ConvertX</a>
+</header>
+
+<main>
+
+  <!-- Hero -->
+  <div class="page-hero">
+    <div class="page-badge">ℹ️ About</div>
+    <h1>Built to <em>bridge</em> the world's differences.</h1>
+    <p>ConvertX is a free, universal converter tool designed for travellers, students, professionals, and curious minds across the globe. No sign-up. No clutter. Just instant, accurate conversions — wherever you are.</p>
+  </div>
+
+  <!-- Mission -->
+  <div class="mission-box">
+    <p>"The world speaks in different currencies, measures in different units, and lives in different time zones. ConvertX exists so none of that ever slows you down."</p>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-number">40+</div>
+      <div class="stat-label">World currencies supported</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">7</div>
+      <div class="stat-label">Unit categories covered</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">32</div>
+      <div class="stat-label">Global time zones available</div>
+    </div>
+  </div>
+
+  <!-- Three Converters -->
+  <div class="section-label">What We Offer</div>
+  <h2>Three powerful converters, one place</h2>
+  <p class="section-intro">ConvertX brings together three essential conversion tools that people use every single day — each one carefully designed to be fast, accurate, and region-aware.</p>
+
+  <div class="converter-cards">
+
+    <div class="converter-card">
+      <span class="card-emoji">💱</span>
+      <h3>Currency Converter</h3>
+      <p>Convert between 40+ world currencies using live exchange rates pulled directly from the European Central Bank — updated daily and completely free.</p>
+      <ul class="card-features">
+        <li>Live rates via ECB & multiple fallbacks</li>
+        <li>40+ currencies including exotic pairs</li>
+        <li>Instant swap between any two currencies</li>
+        <li>Popular rate strip for quick reference</li>
+        <li>Region-aware defaults by country</li>
+      </ul>
+    </div>
+
+    <div class="converter-card">
+      <span class="card-emoji">📐</span>
+      <h3>Unit Converter</h3>
+      <p>Convert across 7 categories of measurement — length, weight, temperature, volume, speed, area, and data — with smart defaults based on your region's system.</p>
+      <ul class="card-features">
+        <li>7 categories, 60+ individual units</li>
+        <li>Metric & Imperial system switching</li>
+        <li>Special temperature logic (°C/°F/K/R)</li>
+        <li>Quick reference cards for common pairs</li>
+        <li>Handles very large and very small values</li>
+      </ul>
+    </div>
+
+    <div class="converter-card">
+      <span class="card-emoji">🕰</span>
+      <h3>Time Zone Converter</h3>
+      <p>Convert times between 32 world time zones instantly, with a live world clock showing the current time in 12 major cities — updating every second.</p>
+      <ul class="card-features">
+        <li>32 time zones across all continents</li>
+        <li>Live world clock updating every second</li>
+        <li>Date-aware conversion across day boundaries</li>
+        <li>12-hour and 24-hour time display</li>
+        <li>DST (daylight saving) handled automatically</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Why Together -->
+  <div class="why-together">
+    <div class="section-label">Why Together</div>
+    <h2>Better as one tool than three</h2>
+    <p class="section-intro" style="margin-bottom:0">Currency, units, and time aren't separate problems — they're three sides of the same challenge: understanding a world that doesn't use a single standard. Combining them in one place isn't just convenient, it's the only way that truly makes sense.</p>
+
+    <div class="together-grid">
+      <div class="together-item">
+        <span class="t-icon">✈️</span>
+        <h4>The Traveller</h4>
+        <p>Flying to Tokyo? You need to know the exchange rate, whether your luggage fits the kg limit, and what time your flight lands locally — all at once. ConvertX handles all three without switching apps.</p>
+      </div>
+      <div class="together-item">
+        <span class="t-icon">💼</span>
+        <h4>The Professional</h4>
+        <p>Working across borders means juggling currencies for invoices, units for specifications, and time zones for meetings. Having one reliable tool eliminates costly conversion mistakes.</p>
+      </div>
+      <div class="together-item">
+        <span class="t-icon">🎓</span>
+        <h4>The Student</h4>
+        <p>Science, geography, economics — all require constant unit and currency conversions. A single focused tool beats searching Google and second-guessing results every time.</p>
+      </div>
+      <div class="together-item">
+        <span class="t-icon">🛒</span>
+        <h4>The Online Shopper</h4>
+        <p>Buying from an international store? Convert the price to your currency, check if the clothing size matches your local standard, and know when the sale ends in your time zone.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Why Important -->
+  <div class="section-label">Why It Matters</div>
+  <h2>Why converters are important</h2>
+  <p class="section-intro">We live in an increasingly interconnected world. Every day, billions of people need to make sense of information expressed in units, currencies, or time zones that aren't their own. Getting these conversions wrong has real consequences.</p>
+
+  <div class="importance-list">
+
+    <div class="importance-item">
+      <div class="importance-num">01</div>
+      <div class="importance-content">
+        <h4>Global commerce depends on accurate currency conversion</h4>
+        <p>Every international transaction — from a tourist buying coffee to a company paying a foreign supplier — requires knowing the true value of money across borders. Even a 1% conversion error on a large transaction can cost thousands. Accurate, real-time rates aren't a luxury; they're a necessity.</p>
+      </div>
+    </div>
+
+    <div class="importance-item">
+      <div class="importance-num">02</div>
+      <div class="importance-content">
+        <h4>Unit confusion causes real-world errors</h4>
+        <p>In 1999, NASA's Mars Climate Orbiter was lost because one engineering team used metric units and another used imperial — a $327 million mistake from a simple unit conversion failure. In everyday life, the same kind of confusion affects medicine dosages, construction measurements, cooking recipes, and sports performance. Getting units right matters enormously.</p>
+      </div>
+    </div>
+
+    <div class="importance-item">
+      <div class="importance-num">03</div>
+      <div class="importance-content">
+        <h4>Time zones are the invisible barrier of global collaboration</h4>
+        <p>With remote work now spanning every continent, knowing exactly what time it is for a colleague in Singapore, a client in New York, or a supplier in Dubai is critical. Missed meetings, late deliveries, and failed deadlines are often the result of simple time zone miscalculations. A reliable time converter eliminates that friction entirely.</p>
+      </div>
+    </div>
+
+    <div class="importance-item">
+      <div class="importance-num">04</div>
+      <div class="importance-content">
+        <h4>Access to free tools levels the playing field</h4>
+        <p>Not everyone has access to expensive software or financial tools. A free, accurate, and easy-to-use converter is particularly valuable for people in developing economies, students, small business owners, and anyone navigating international life on a budget. ConvertX is committed to staying free for everyone, forever.</p>
+      </div>
+    </div>
+
+    <div class="importance-item">
+      <div class="importance-num">05</div>
+      <div class="importance-content">
+        <h4>Informed decisions start with accurate data</h4>
+        <p>Whether you're deciding where to invest, which product to buy, or where to travel next — conversions are the foundation of informed decision-making. Bad conversion data leads to bad decisions. ConvertX pulls from authoritative sources so you always start with the right numbers.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- CTA -->
+  <div class="cta-box">
+    <h2>Start converting now</h2>
+    <p>Free, fast, and built for the whole world. No account needed.</p>
+    <a href="index.html" class="cta-btn">⚡ Open ConvertX</a>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div style="font-family:'Manrope',serif;font-size:1.1rem;font-weight:600;margin-bottom:4px;">ConvertX</div>
+    <div>© 2025 ConvertX. Currency data via Frankfurter API (ECB).</div>
+  </div>
+  <div class="footer-links">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="#">Terms of Use</a>
+    <a href="about.html">About</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+</body>
+</html>
