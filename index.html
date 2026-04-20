@@ -1180,44 +1180,52 @@ async function fetchRates() {
   const timestampEl = document.getElementById('rateTimestamp');
   statusEl.textContent = 'Fetching live exchange rates…';
 
-  // Source 1: jsDelivr CDN
-  try {
-    const data = await tryFetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json');
-    ratesCache = data.usd;
-    ratesCache['usd'] = 1;
-    ratesDate  = data.date || 'today';
-    timestampEl.textContent = `Rates as of ${ratesDate} · ${ALL_CURRENCIES.length} currencies`;
-    statusEl.textContent    = '✓ Live rates loaded (jsDelivr CDN)';
-    convertCurrency(); buildPopularRates(); return;
-  } catch(e) { /* next */ }
-
-  // Source 2: Frankfurter (ECB)
-  try {
-    const data = await tryFetch('https://api.frankfurter.app/latest?base=USD');
-    ratesCache = {};
-    Object.entries(data.rates).forEach(([k,v]) => ratesCache[k.toLowerCase()] = v);
-    ratesCache['usd'] = 1;
-    ratesDate  = data.date || 'today';
-    timestampEl.textContent = `Rates as of ${ratesDate} · ${ALL_CURRENCIES.length} currencies`;
-    statusEl.textContent    = '✓ Live rates loaded (European Central Bank)';
-    convertCurrency(); buildPopularRates(); return;
-  } catch(e) { /* next */ }
-
-  // Source 3: open.er-api.com
+  // Source 1: ExchangeRate-API (open tier) — closest to Google's mid-market rates, updates every 10 min
   try {
     const data = await tryFetch('https://open.er-api.com/v6/latest/USD');
-    ratesCache = {};
-    Object.entries(data.rates).forEach(([k,v]) => ratesCache[k.toLowerCase()] = v);
-    ratesCache['usd'] = 1;
-    ratesDate  = data.time_last_update_utc || 'today';
-    timestampEl.textContent = `Rates as of ${ratesDate} · ${ALL_CURRENCIES.length} currencies`;
-    statusEl.textContent    = '✓ Live rates loaded (Open Exchange Rates)';
-    convertCurrency(); buildPopularRates(); return;
+    if (data && data.rates) {
+      ratesCache = {};
+      Object.entries(data.rates).forEach(([k, v]) => ratesCache[k.toLowerCase()] = v);
+      ratesCache['usd'] = 1;
+      ratesDate = data.time_last_update_utc
+        ? new Date(data.time_last_update_utc).toLocaleString('en-US', { dateStyle:'medium', timeStyle:'short' })
+        : 'today';
+      timestampEl.textContent = `Mid-market rates · Updated ${ratesDate} · ${ALL_CURRENCIES.length} currencies`;
+      statusEl.textContent    = '✓ Live mid-market rates';
+      convertCurrency(); buildPopularRates(); return;
+    }
+  } catch(e) { /* next */ }
+
+  // Source 2: Frankfurter / European Central Bank — daily fix, very accurate
+  try {
+    const data = await tryFetch('https://api.frankfurter.app/latest?base=USD');
+    if (data && data.rates) {
+      ratesCache = {};
+      Object.entries(data.rates).forEach(([k, v]) => ratesCache[k.toLowerCase()] = v);
+      ratesCache['usd'] = 1;
+      ratesDate = data.date || 'today';
+      timestampEl.textContent = `ECB mid-market rates · ${ratesDate} · ${ALL_CURRENCIES.length} currencies`;
+      statusEl.textContent    = '✓ Live rates (European Central Bank daily fix)';
+      convertCurrency(); buildPopularRates(); return;
+    }
+  } catch(e) { /* next */ }
+
+  // Source 3: jsDelivr CDN (fawazahmed0 community data)
+  try {
+    const data = await tryFetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json');
+    if (data && data.usd) {
+      ratesCache = data.usd;
+      ratesCache['usd'] = 1;
+      ratesDate = data.date || 'today';
+      timestampEl.textContent = `Rates as of ${ratesDate} · ${ALL_CURRENCIES.length} currencies`;
+      statusEl.textContent    = '✓ Live rates loaded (community CDN)';
+      convertCurrency(); buildPopularRates(); return;
+    }
   } catch(e) { /* fallback */ }
 
   // Static fallback
   ratesCache = { ...FALLBACK_RATES };
-  statusEl.textContent = '⚠ Live rates unavailable — using recent estimates';
+  statusEl.textContent    = '⚠ Live rates unavailable — using recent estimates';
   timestampEl.textContent = `Estimated rates · ${ALL_CURRENCIES.length} currencies`;
   convertCurrency(); buildPopularRates();
 }
