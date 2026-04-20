@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ConvertX — Universal Currency, Unit & Time Converter</title>
+<meta name="description" content="ConvertX is the world's most comprehensive converter tool. Convert currencies, units of measurement, and time zones instantly — tailored to your region.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0c10;
+    --surface: #13131a;
+    --surface2: #1a1a25;
+    --border: #2a2a38;
+    --accent: #c9a84c;
+    --accent2: #e8c97e;
+    --text: #f0ede8;
+    --muted: #8885a0;
+    --danger: #e07070;
+    --success: #6ec98b;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 8px 40px rgba(0,0,0,0.5);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Mesh background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 10%, rgba(201,168,76,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 85% 80%, rgba(120,100,200,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(201,168,76,0.03) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body > * { position: relative; z-index: 1; }
+
+  /* ─── HEADER ─── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(12,12,16,0.85);
+    backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .logo {
+    font-family: 'Manrope', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .logo span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .logo-cursor {
+    display: inline-block;
+    font-family: 'Manrope', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text);
+    -webkit-text-fill-color: var(--text);
+    margin-left: 1px;
+    vertical-align: baseline;
+    line-height: 1;
+  }
+
+  .logo-cursor::after {
+    content: '_';
+  }
+
+  .logo-cursor.blinking {
+    animation: cursorBlink 1.1s cubic-bezier(0.4,0,0.6,1) infinite;
+  }
+
+  .logo-cursor.typing {
+    animation: none;
+    opacity: 1;
+  }
+
+  @keyframes cursorBlink {
+    0%, 45%  { opacity: 1; }
+    55%, 100% { opacity: 0; }
+  }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .region-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    padding: 8px 16px;
+    transition: border-color 0.2s;
+  }
+
+  .region-wrapper:focus-within { border-color: var(--accent); }
+
+  .region-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    white-space: nowrap;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .region-flag { font-size: 1.3rem; }
+
+  select {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-weight: 500;
+  }
+
+  select option { background: #1a1a25; color: var(--text); }
+
+
+  /* ─── MAIN ─── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  .hero {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .hero h1 {
+    font-family: 'Manrope', serif;
+    font-size: clamp(2.5rem, 5vw, 4.2rem);
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 14px;
+    letter-spacing: -1px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 480px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ─── TABS ─── */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 5px;
+    margin-bottom: 36px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .tab-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 10px 26px;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.25s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .tab-btn:hover { color: var(--text); }
+
+  .tab-btn.active {
+    background: linear-gradient(135deg, var(--accent), #b8932a);
+    color: #0c0c10;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(201,168,76,0.3);
+  }
+
+  .tab-icon { font-size: 1rem; }
+
+  /* ─── CONVERTER PANELS ─── */
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeUp 0.35s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    box-shadow: var(--shadow);
+  }
+
+  .card-header {
+    margin-bottom: 28px;
+  }
+
+  .card-title {
+    font-family: 'Manrope', serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .card-title .icon-badge {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, rgba(201,168,76,0.2), rgba(201,168,76,0.05));
+    border: 1px solid rgba(201,168,76,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .card-subtitle { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
+
+  /* ─── CURRENCY ─── */
+  .converter-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: end;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 640px) {
+    .converter-row { grid-template-columns: 1fr; }
+    .swap-btn { transform: rotate(90deg); margin: 0 auto; }
+  }
+
+  .field-group label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    font-weight: 500;
+  }
+
+  .field-inner {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .field-inner:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.1);
+  }
+
+  .field-inner select,
+  .field-inner input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    padding: 14px 16px;
+  }
+
+  .field-inner input {
+    width: 100%;
+    font-size: 1.3rem;
+    font-weight: 300;
+    min-width: 0;
+  }
+
+  .field-inner input::placeholder { color: var(--muted); }
+
+  .currency-select {
+    font-size: 0.85rem;
+    font-weight: 600;
+    min-width: 80px;
+    border-right: 1px solid var(--border);
+    padding-right: 12px;
+    cursor: pointer;
+  }
+
+  .swap-btn {
+    width: 44px; height: 44px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--accent);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .swap-btn:hover {
+    background: rgba(201,168,76,0.1);
+    border-color: var(--accent);
+    transform: rotate(180deg);
+  }
+
+  .result-box {
+    background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.02));
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: var(--radius-sm);
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+
+  .result-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+
+  .result-value {
+    font-family: 'Manrope', serif;
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: var(--accent2);
+    line-height: 1.1;
+  }
+
+  .result-subtext { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
+
+  .convert-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--accent), #b8932a);
+    border: none;
+    border-radius: var(--radius-sm);
+    color: #0c0c10;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.02em;
+  }
+
+  .convert-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(201,168,76,0.35);
+  }
+
+  .convert-btn:active { transform: translateY(0); }
+
+  .rate-strip {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  .rate-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 5px 13px;
+    font-size: 0.78rem;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .rate-chip strong { color: var(--text); }
+
+  /* ─── UNIT CONVERTER ─── */
+  .unit-categories {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .cat-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    color: var(--muted);
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 7px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cat-btn:hover { color: var(--text); border-color: var(--muted); }
+
+  .cat-btn.active {
+    background: rgba(201,168,76,0.12);
+    border-color: var(--accent);
+    color: var(--accent2);
+  }
+
+  .unit-grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: end;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 640px) { .unit-grid { grid-template-columns: 1fr; } }
+
+  /* ─── TIME ─── */
+  .time-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+    margin-top: 20px;
+  }
+
+  .tz-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 18px 20px;
+    transition: border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .tz-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--accent), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .tz-card:hover { border-color: rgba(201,168,76,0.4); }
+  .tz-card:hover::before { opacity: 1; }
+
+  .tz-city { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+
+  .tz-time {
+    font-family: 'Manrope', serif;
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1;
+  }
+
+  .tz-date { font-size: 0.78rem; color: var(--muted); margin-top: 4px; }
+
+  .tz-offset {
+    position: absolute;
+    top: 14px; right: 14px;
+    font-size: 0.72rem;
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .time-converter-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 16px;
+    align-items: end;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 640px) { .time-converter-row { grid-template-columns: 1fr; } }
+
+  .time-input-wrap {
+    display: flex;
+    gap: 8px;
+  }
+
+  .time-input-wrap input[type="time"],
+  .time-input-wrap input[type="date"] {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    padding: 12px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    min-width: 0;
+  }
+
+  .time-input-wrap input:focus { border-color: var(--accent); }
+
+  /* ─── QUICK REFS ─── */
+  .quick-refs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+
+  .ref-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    font-size: 0.82rem;
+  }
+
+  .ref-from { color: var(--muted); margin-bottom: 2px; font-size: 0.75rem; }
+  .ref-to { color: var(--accent2); font-weight: 600; font-size: 1rem; }
+  .ref-desc { color: var(--muted); font-size: 0.7rem; margin-top: 4px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--accent2); }
+
+  /* ─── SPINNER ─── */
+  .spinner {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(201,168,76,0.3);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-left: 8px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .hidden { display: none !important; }
+
+  /* ─── RESPONSIVE HEADER ─── */
+  @media (max-width: 600px) {
+    header { padding: 14px 20px; }
+    main { padding: 24px 16px 60px; }
+    footer { padding: 24px 20px; }
+    .tabs { width: 100%; }
+    .tab-btn { flex: 1; justify-content: center; padding: 10px 14px; }
+  }
+
+  .notice-bar {
+    display: flex; align-items: center; gap: 8px;
+    background: rgba(201,168,76,0.07);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: var(--radius-sm);
+    padding: 10px 16px;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 24px;
+  }
+
+  .notice-bar .dot {
+    width: 8px; height: 8px;
+    background: var(--success);
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-shadow: 0 0 6px var(--success);
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HEADER ═══════════════════ -->
+<header>
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    <span id="logoText"></span><span class="logo-cursor blinking" id="logoCursor"></span>
+  </div>
+
+  <div class="region-wrapper">
+    <span class="region-label">Region</span>
+    <span class="region-flag" id="regionFlag">🌍</span>
+    <select id="regionSelect" onchange="applyRegion()">
+      <option value="US">🇺🇸 United States</option>
+      <option value="GB">🇬🇧 United Kingdom</option>
+      <option value="EU">🇪🇺 European Union</option>
+      <option value="CA">🇨🇦 Canada</option>
+      <option value="AU">🇦🇺 Australia</option>
+      <option value="IN">🇮🇳 India</option>
+      <option value="JP">🇯🇵 Japan</option>
+      <option value="CN">🇨🇳 China</option>
+      <option value="BR">🇧🇷 Brazil</option>
+      <option value="MX">🇲🇽 Mexico</option>
+      <option value="AE">🇦🇪 UAE</option>
+      <option value="SG">🇸🇬 Singapore</option>
+      <option value="ZA">🇿🇦 South Africa</option>
+      <option value="KR">🇰🇷 South Korea</option>
+      <option value="NG">🇳🇬 Nigeria</option>
+    </select>
+  </div>
+</header>
+
+<!-- ═══════════════════ MAIN ═══════════════════ -->
+<main>
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>Convert <em>anything,</em><br>for anyone, anywhere.</h1>
+    <p>Real-time currency rates, universal unit conversions, and global time zone tools — all in one place.</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs" role="tablist">
+    <button class="tab-btn active" onclick="switchTab('currency')" id="tab-currency">
+      <span class="tab-icon">💱</span> Currency
+    </button>
+    <button class="tab-btn" onclick="switchTab('unit')" id="tab-unit">
+      <span class="tab-icon">📐</span> Units
+    </button>
+    <button class="tab-btn" onclick="switchTab('time')" id="tab-time">
+      <span class="tab-icon">🕰</span> Time
+    </button>
+  </div>
+
+  <!-- Layout -->
+  <div class="layout-with-sidebar">
+    <div id="converterArea">
+
+      <!-- ──────────── CURRENCY PANEL ──────────── -->
+      <div class="panel active" id="panel-currency">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="icon-badge">💱</div>
+              Currency Converter
+            </div>
+            <div class="card-subtitle" id="rateTimestamp">Fetching live exchange rates…</div>
+          </div>
+
+          <div class="notice-bar">
+            <div class="dot"></div>
+            <span id="rateStatus">Loading rates from European Central Bank…</span>
+          </div>
+
+          <div class="converter-row">
+            <div class="field-group">
+              <label>Amount &amp; From</label>
+              <div class="field-inner">
+                <select class="currency-select" id="currFrom"></select>
+                <input type="number" id="currAmount" value="100" min="0" step="any" placeholder="0.00" oninput="convertCurrency()">
+              </div>
+            </div>
+            <button class="swap-btn" onclick="swapCurrency()" title="Swap currencies">⇄</button>
+            <div class="field-group">
+              <label>To Currency</label>
+              <div class="field-inner">
+                <select class="currency-select" id="currTo"></select>
+                <input type="number" id="currResult" placeholder="—" readonly style="color:var(--accent2)">
+              </div>
+            </div>
+          </div>
+
+          <div class="result-box" id="currResultBox" style="display:none">
+            <div class="result-label">Converted Amount</div>
+            <div class="result-value" id="currResultLarge">—</div>
+            <div class="result-subtext" id="currResultSub">—</div>
+          </div>
+
+          <button class="convert-btn" onclick="convertCurrency()">Convert Now</button>
+
+          <div class="rate-strip" id="popularRates"></div>
+        </div>
+
+      </div>
+
+      <!-- ──────────── UNIT PANEL ──────────── -->
+      <div class="panel" id="panel-unit">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="icon-badge">📐</div>
+              Unit Converter
+            </div>
+            <div class="card-subtitle" id="unitSystemLabel">System: Metric (SI)</div>
+          </div>
+
+          <div class="unit-categories" id="unitCategories"></div>
+
+          <div class="unit-grid">
+            <div class="field-group">
+              <label>Value &amp; From Unit</label>
+              <div class="field-inner">
+                <input type="number" id="unitFrom" value="1" step="any" oninput="convertUnit()" style="font-size:1.3rem;font-weight:300">
+                <select id="unitFromSel" style="border-left:1px solid var(--border); min-width:110px;" onchange="convertUnit()"></select>
+              </div>
+            </div>
+            <button class="swap-btn" onclick="swapUnit()" title="Swap units">⇄</button>
+            <div class="field-group">
+              <label>To Unit</label>
+              <div class="field-inner">
+                <input type="number" id="unitTo" placeholder="—" readonly style="font-size:1.3rem;font-weight:300;color:var(--accent2)">
+                <select id="unitToSel" style="border-left:1px solid var(--border); min-width:110px;" onchange="convertUnit()"></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="result-box" id="unitResultBox" style="display:none">
+            <div class="result-label">Result</div>
+            <div class="result-value" id="unitResultLarge">—</div>
+            <div class="result-subtext" id="unitResultSub">—</div>
+          </div>
+
+          <h3 style="font-family:'Manrope',serif; font-size:1.1rem; margin-bottom:12px; color:var(--muted); font-weight:500;">Quick Reference</h3>
+          <div class="quick-refs" id="quickRefs"></div>
+        </div>
+
+      </div>
+
+      <!-- ──────────── TIME PANEL ──────────── -->
+      <div class="panel" id="panel-time">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">
+              <div class="icon-badge">🕰</div>
+              Time Zone Converter
+            </div>
+            <div class="card-subtitle">Convert and compare times across the globe</div>
+          </div>
+
+          <div class="time-converter-row">
+            <div class="field-group">
+              <label>Date &amp; Time (From)</label>
+              <div style="display:flex;gap:8px">
+                <input type="date" id="timeDate" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'Outfit',sans-serif;font-size:0.9rem;padding:12px 14px;outline:none" oninput="convertTime()">
+                <input type="time" id="timeInput" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'Outfit',sans-serif;font-size:0.9rem;padding:12px 14px;outline:none" oninput="convertTime()">
+              </div>
+            </div>
+            <div style="width:44px"></div>
+            <div></div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
+            <div class="field-group">
+              <label>From Time Zone</label>
+              <div class="field-inner">
+                <select id="tzFrom" style="width:100%;padding:13px 14px;font-size:0.88rem;" onchange="convertTime()"></select>
+              </div>
+            </div>
+            <div class="field-group">
+              <label>To Time Zone</label>
+              <div class="field-inner">
+                <select id="tzTo" style="width:100%;padding:13px 14px;font-size:0.88rem;" onchange="convertTime()"></select>
+              </div>
+            </div>
+          </div>
+
+          <div class="result-box" id="timeResultBox">
+            <div class="result-label">Converted Time</div>
+            <div class="result-value" id="timeResult">—</div>
+            <div class="result-subtext" id="timeResultSub">—</div>
+          </div>
+
+          <h3 style="font-family:'Manrope',serif;font-size:1.2rem;margin-bottom:14px;font-weight:500;">World Clock <span style="font-size:0.75rem;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:400;" id="clockTick"></span></h3>
+          <div class="time-grid" id="worldClock"></div>
+        </div>
+
+      </div>
+
+    </div><!-- end converterArea -->
+
+  </div>
+
+</main>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer>
+  <div>
+    <div style="font-family:'Manrope',serif;font-size:1.1rem;font-weight:600;margin-bottom:4px;">ConvertX</div>
+    <div>© 2025 ConvertX. Currency data via jsDelivr CDN.</div>
+  </div>
+  <div class="footer-links">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="#">Terms of Use</a>
+    <a href="about.html">About</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<!-- ═══════════════════ SCRIPTS ═══════════════════ -->
+<script>
+// ╔══════════════════════════════════════════╗
+// ║            REGION CONFIG                ║
+// ╚══════════════════════════════════════════╝
+const REGIONS = {
+  US: { flag:'🇺🇸', currency:'USD', system:'imperial', tz:'America/New_York', tzLabel:'New York' },
+  GB: { flag:'🇬🇧', currency:'GBP', system:'metric',   tz:'Europe/London',   tzLabel:'London' },
+  EU: { flag:'🇪🇺', currency:'EUR', system:'metric',   tz:'Europe/Paris',    tzLabel:'Paris' },
+  CA: { flag:'🇨🇦', currency:'CAD', system:'metric',   tz:'America/Toronto', tzLabel:'Toronto' },
+  AU: { flag:'🇦🇺', currency:'AUD', system:'metric',   tz:'Australia/Sydney',tzLabel:'Sydney' },
+  IN: { flag:'🇮🇳', currency:'INR', system:'metric',   tz:'Asia/Kolkata',    tzLabel:'Mumbai' },
+  JP: { flag:'🇯🇵', currency:'JPY', system:'metric',   tz:'Asia/Tokyo',      tzLabel:'Tokyo' },
+  CN: { flag:'🇨🇳', currency:'CNY', system:'metric',   tz:'Asia/Shanghai',   tzLabel:'Shanghai' },
+  BR: { flag:'🇧🇷', currency:'BRL', system:'metric',   tz:'America/Sao_Paulo',tzLabel:'São Paulo' },
+  MX: { flag:'🇲🇽', currency:'MXN', system:'metric',   tz:'America/Mexico_City',tzLabel:'Mexico City' },
+  AE: { flag:'🇦🇪', currency:'AED', system:'metric',   tz:'Asia/Dubai',      tzLabel:'Dubai' },
+  SG: { flag:'🇸🇬', currency:'SGD', system:'metric',   tz:'Asia/Singapore',  tzLabel:'Singapore' },
+  ZA: { flag:'🇿🇦', currency:'ZAR', system:'metric',   tz:'Africa/Johannesburg',tzLabel:'Johannesburg' },
+  KR: { flag:'🇰🇷', currency:'KRW', system:'metric',   tz:'Asia/Seoul',      tzLabel:'Seoul' },
+  NG: { flag:'🇳🇬', currency:'NGN', system:'metric',   tz:'Africa/Lagos',    tzLabel:'Lagos' },
+};
+
+let currentRegion = 'US';
+
+function applyRegion() {
+  const code = document.getElementById('regionSelect').value;
+  currentRegion = code;
+  const r = REGIONS[code];
+  document.getElementById('regionFlag').textContent = r.flag;
+  // Set currency defaults
+  document.getElementById('currFrom').value = 'USD';
+  const toSel = document.getElementById('currTo');
+  if (toSel.querySelector(`option[value="${r.currency}"]`)) toSel.value = r.currency;
+  // Set unit system
+  document.getElementById('unitSystemLabel').textContent = `System: ${r.system === 'metric' ? 'Metric (SI)' : 'Imperial / US Customary'}`;
+  buildUnitSelects(r.system);
+  convertCurrency();
+  updateWorldClock();
+}
+
+// ╔══════════════════════════════════════════╗
+// ║         TAB SWITCHING                   ║
+// ╚══════════════════════════════════════════╝
+function switchTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'time') updateWorldClock();
+}
+
+// ╔══════════════════════════════════════════╗
+// ║         CURRENCY CONVERTER               ║
+// ╚══════════════════════════════════════════╝
+const ALL_CURRENCIES = [
+  'USD','EUR','GBP','JPY','AUD','CAD','CHF','CNY','SEK','NZD',
+  'MXN','SGD','HKD','NOK','KRW','TRY','INR','RUB','BRL','ZAR',
+  'DKK','PLN','THB','IDR','HUF','CZK','ILS','CLP','PHP','AED',
+  'COP','SAR','MYR','RON','NGN','ARS','EGP','QAR','KWD','UAH'
+];
+
+const CURRENCY_NAMES = {
+  USD:'US Dollar',EUR:'Euro',GBP:'British Pound',JPY:'Japanese Yen',
+  AUD:'Australian Dollar',CAD:'Canadian Dollar',CHF:'Swiss Franc',
+  CNY:'Chinese Yuan',SEK:'Swedish Krona',NZD:'New Zealand Dollar',
+  MXN:'Mexican Peso',SGD:'Singapore Dollar',HKD:'Hong Kong Dollar',
+  NOK:'Norwegian Krone',KRW:'South Korean Won',TRY:'Turkish Lira',
+  INR:'Indian Rupee',RUB:'Russian Ruble',BRL:'Brazilian Real',
+  ZAR:'South African Rand',DKK:'Danish Krone',PLN:'Polish Zloty',
+  THB:'Thai Baht',IDR:'Indonesian Rupiah',HUF:'Hungarian Forint',
+  CZK:'Czech Koruna',ILS:'Israeli Shekel',CLP:'Chilean Peso',
+  PHP:'Philippine Peso',AED:'UAE Dirham',COP:'Colombian Peso',
+  SAR:'Saudi Riyal',MYR:'Malaysian Ringgit',RON:'Romanian Leu',
+  NGN:'Nigerian Naira',ARS:'Argentine Peso',EGP:'Egyptian Pound',
+  QAR:'Qatari Riyal',KWD:'Kuwaiti Dinar',UAH:'Ukrainian Hryvnia'
+};
+
+let ratesCache = {};   // all rates relative to USD
+let ratesBase = 'USD';
+let ratesDate = '';
+
+function populateCurrencySelects() {
+  const from = document.getElementById('currFrom');
+  const to = document.getElementById('currTo');
+  ALL_CURRENCIES.forEach(c => {
+    from.innerHTML += `<option value="${c}">${c}</option>`;
+    to.innerHTML   += `<option value="${c}">${c}</option>`;
+  });
+  from.value = 'USD';
+  to.value   = 'EUR';
+}
+
+// Returns rate: how many `to` per 1 `from`  (both keyed against USD)
+function getRate(from, to) {
+  const fromUSD = from === 'USD' ? 1 : (ratesCache[from.toLowerCase()] || ratesCache[from] || 1);
+  const toUSD   = to   === 'USD' ? 1 : (ratesCache[to.toLowerCase()]   || ratesCache[to]   || 1);
+  return toUSD / fromUSD;
+}
+
+async function tryFetch(url) {
+  const res = await fetch(url, { mode: 'cors' });
+  if (!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+async function fetchRates() {
+  const statusEl    = document.getElementById('rateStatus');
+  const timestampEl = document.getElementById('rateTimestamp');
+  statusEl.textContent = 'Fetching live exchange rates…';
+
+  // ── Source 1: jsDelivr CDN (Fawaz Ahmed's daily-updated free dataset)
+  try {
+    const data = await tryFetch(
+      'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json'
+    );
+    ratesCache = data.usd;          // { eur: 0.92, gbp: 0.79, jpy: 149.3, … }
+    ratesCache['usd'] = 1;
+    ratesDate  = data.date || 'today';
+    timestampEl.textContent = `Rates as of ${ratesDate}`;
+    statusEl.textContent    = '✓ Live rates loaded (jsDelivr CDN)';
+    convertCurrency(); buildPopularRates(); return;
+  } catch(e) { /* try next */ }
+
+  // ── Source 2: Frankfurter (ECB)
+  try {
+    const data = await tryFetch('https://api.frankfurter.app/latest?base=USD');
+    const raw  = data.rates;        // relative to USD
+    ratesCache = {};
+    Object.entries(raw).forEach(([k,v]) => ratesCache[k.toLowerCase()] = v);
+    ratesCache['usd'] = 1;
+    ratesDate  = data.date || 'today';
+    timestampEl.textContent = `Rates as of ${ratesDate}`;
+    statusEl.textContent    = '✓ Live rates loaded (European Central Bank)';
+    convertCurrency(); buildPopularRates(); return;
+  } catch(e) { /* try next */ }
+
+  // ── Source 3: open.er-api.com (free, no key)
+  try {
+    const data = await tryFetch('https://open.er-api.com/v6/latest/USD');
+    const raw  = data.rates;
+    ratesCache = {};
+    Object.entries(raw).forEach(([k,v]) => ratesCache[k.toLowerCase()] = v);
+    ratesCache['usd'] = 1;
+    ratesDate  = data.time_last_update_utc || 'today';
+    timestampEl.textContent = `Rates as of ${ratesDate}`;
+    statusEl.textContent    = '✓ Live rates loaded (Open Exchange Rates)';
+    convertCurrency(); buildPopularRates(); return;
+  } catch(e) { /* all sources failed */ }
+
+  // ── Static fallback (approximate mid-market rates, USD base)
+  statusEl.textContent = '⚠ Live rates unavailable — using recent estimates';
+  ratesCache = {
+    usd:1,    eur:0.922, gbp:0.787, jpy:149.8, aud:1.528, cad:1.363,
+    chf:0.898,cny:7.241, inr:83.12, brl:4.972, mxn:17.15, sgd:1.338,
+    zar:18.63, aed:3.673,krw:1325,  ngn:1540,  sek:10.42, nok:10.56,
+    dkk:6.887,pln:3.944, huf:357.2, czk:22.91, ils:3.652, thb:35.1,
+    idr:15680,hkd:7.824, nzd:1.628, myr:4.721, qar:3.641, kwd:0.308,
+    sar:3.751,cop:3920,  clp:906,   php:55.7,  ars:880,   egp:30.9,
+    uah:37.2, ron:4.587, try:32.15, rub:91.5,  sek:10.42,
+  };
+  convertCurrency(); buildPopularRates();
+}
+
+function convertCurrency() {
+  const from   = document.getElementById('currFrom').value;
+  const to     = document.getElementById('currTo').value;
+  const amount = parseFloat(document.getElementById('currAmount').value) || 0;
+  if (!Object.keys(ratesCache).length) return;
+  const rate   = getRate(from, to);
+  const result = amount * rate;
+  const fmt    = n => n < 0.01 ? n.toFixed(6) : n < 10 ? n.toFixed(4) : n.toFixed(2);
+  document.getElementById('currResult').value = fmt(result);
+  document.getElementById('currResultBox').style.display = 'block';
+  document.getElementById('currResultLarge').textContent = `${fmt(result)} ${to}`;
+  document.getElementById('currResultSub').textContent   =
+    `1 ${from} = ${fmt(rate)} ${to}  ·  ${CURRENCY_NAMES[from]||from} → ${CURRENCY_NAMES[to]||to}`;
+}
+
+function swapCurrency() {
+  const f = document.getElementById('currFrom');
+  const t = document.getElementById('currTo');
+  [f.value, t.value] = [t.value, f.value];
+  convertCurrency();
+}
+
+function buildPopularRates() {
+  const pairs = [['USD','EUR'],['USD','GBP'],['USD','JPY'],['EUR','GBP'],['GBP','USD'],['USD','INR']];
+  const strip = document.getElementById('popularRates');
+  strip.innerHTML = pairs.map(([f,t]) => {
+    const r   = getRate(f, t);
+    const fmt = n => n < 10 ? n.toFixed(4) : n.toFixed(2);
+    return `<div class="rate-chip">1 ${f} = <strong>${fmt(r)} ${t}</strong></div>`;
+  }).join('');
+}
+
+// ╔══════════════════════════════════════════╗
+// ║         UNIT CONVERTER                   ║
+// ╚══════════════════════════════════════════╝
+const UNIT_DATA = {
+  Length: {
+    icon: '📏',
+    units: {
+      Meter:      { factor:1,          symbol:'m' },
+      Kilometer:  { factor:1000,       symbol:'km' },
+      Centimeter: { factor:0.01,       symbol:'cm' },
+      Millimeter: { factor:0.001,      symbol:'mm' },
+      Mile:       { factor:1609.344,   symbol:'mi' },
+      Yard:       { factor:0.9144,     symbol:'yd' },
+      Foot:       { factor:0.3048,     symbol:'ft' },
+      Inch:       { factor:0.0254,     symbol:'in' },
+      'Nautical Mile': { factor:1852,  symbol:'nmi'},
+      Furlong:    { factor:201.168,    symbol:'fur'},
+    },
+    imperial: ['Mile','Yard','Foot','Inch'],
+    metric:   ['Meter','Kilometer','Centimeter','Millimeter'],
+    refs: [['1 Mile','1.609 km'],['1 Foot','30.48 cm'],['1 Inch','2.54 cm'],['1 km','0.621 mi']],
+  },
+  Weight: {
+    icon: '⚖️',
+    units: {
+      Kilogram:  { factor:1,           symbol:'kg' },
+      Gram:      { factor:0.001,       symbol:'g'  },
+      Tonne:     { factor:1000,        symbol:'t'  },
+      Pound:     { factor:0.453592,    symbol:'lb' },
+      Ounce:     { factor:0.0283495,   symbol:'oz' },
+      Stone:     { factor:6.35029,     symbol:'st' },
+      Milligram: { factor:0.000001,    symbol:'mg' },
+      Carat:     { factor:0.0002,      symbol:'ct' },
+    },
+    imperial:['Pound','Ounce','Stone'],
+    metric:  ['Kilogram','Gram','Tonne','Milligram'],
+    refs: [['1 kg','2.205 lb'],['1 lb','0.454 kg'],['1 oz','28.35 g'],['1 Stone','6.35 kg']],
+  },
+  Temperature: {
+    icon: '🌡️',
+    units: { Celsius:{},Fahrenheit:{},Kelvin:{},Rankine:{} },
+    imperial:['Fahrenheit','Rankine'],
+    metric:  ['Celsius','Kelvin'],
+    refs: [['0 °C','32 °F'],['100 °C','212 °F'],['37 °C','98.6 °F'],['0 °K','-273.15 °C']],
+    special: true,
+  },
+  Volume: {
+    icon: '🧊',
+    units: {
+      Liter:       { factor:1,          symbol:'L'   },
+      Milliliter:  { factor:0.001,      symbol:'mL'  },
+      'Cubic Meter':{ factor:1000,      symbol:'m³'  },
+      Gallon:      { factor:3.78541,    symbol:'gal' },
+      Quart:       { factor:0.946353,   symbol:'qt'  },
+      Pint:        { factor:0.473176,   symbol:'pt'  },
+      Cup:         { factor:0.236588,   symbol:'cup' },
+      'Fluid Oz':  { factor:0.0295735,  symbol:'fl oz'},
+      'UK Gallon': { factor:4.54609,    symbol:'UK gal'},
+      Tablespoon:  { factor:0.0147868,  symbol:'tbsp'},
+    },
+    imperial:['Gallon','Quart','Pint','Cup','Fluid Oz'],
+    metric:  ['Liter','Milliliter','Cubic Meter'],
+    refs: [['1 L','0.264 gal'],['1 gal','3.785 L'],['1 cup','236.6 mL'],['1 pint','0.568 L']],
+  },
+  Speed: {
+    icon: '💨',
+    units: {
+      'm/s':    { factor:1,           symbol:'m/s'  },
+      'km/h':   { factor:0.277778,    symbol:'km/h' },
+      'mph':    { factor:0.44704,     symbol:'mph'  },
+      'knot':   { factor:0.514444,    symbol:'kn'   },
+      'ft/s':   { factor:0.3048,      symbol:'ft/s' },
+      'Mach':   { factor:343,         symbol:'Ma'   },
+    },
+    imperial:['mph','ft/s','knot'],
+    metric:  ['km/h','m/s'],
+    refs: [['100 km/h','62.1 mph'],['1 mph','1.609 km/h'],['1 knot','1.852 km/h'],['Sound (Mach 1)','343 m/s']],
+  },
+  Area: {
+    icon: '🗺️',
+    units: {
+      'm²':     { factor:1,           symbol:'m²'  },
+      'km²':    { factor:1e6,         symbol:'km²' },
+      'cm²':    { factor:0.0001,      symbol:'cm²' },
+      Hectare:  { factor:10000,       symbol:'ha'  },
+      Acre:     { factor:4046.86,     symbol:'ac'  },
+      'ft²':    { factor:0.092903,    symbol:'ft²' },
+      'yd²':    { factor:0.836127,    symbol:'yd²' },
+      'mi²':    { factor:2.59e6,      symbol:'mi²' },
+    },
+    imperial:['Acre','ft²','yd²','mi²'],
+    metric:  ['m²','km²','Hectare','cm²'],
+    refs: [['1 Acre','4047 m²'],['1 ha','2.471 ac'],['1 km²','247 ac'],['1 mi²','640 ac']],
+  },
+  Data: {
+    icon: '💾',
+    units: {
+      Bit:      { factor:1,              symbol:'b'   },
+      Byte:     { factor:8,              symbol:'B'   },
+      Kilobyte: { factor:8192,           symbol:'KB'  },
+      Megabyte: { factor:8388608,        symbol:'MB'  },
+      Gigabyte: { factor:8589934592,     symbol:'GB'  },
+      Terabyte: { factor:8796093022208,  symbol:'TB'  },
+    },
+    imperial:[],
+    metric:['Byte','Kilobyte','Megabyte','Gigabyte','Terabyte'],
+    refs: [['1 KB','1024 B'],['1 MB','1024 KB'],['1 GB','1024 MB'],['1 TB','1024 GB']],
+  },
+};
+
+let currentCategory = 'Length';
+
+function buildCategoryTabs() {
+  const el = document.getElementById('unitCategories');
+  el.innerHTML = Object.entries(UNIT_DATA).map(([name, d]) =>
+    `<button class="cat-btn ${name===currentCategory?'active':''}" onclick="selectCategory('${name}')">${d.icon} ${name}</button>`
+  ).join('');
+}
+
+function selectCategory(cat) {
+  currentCategory = cat;
+  buildCategoryTabs();
+  const region = REGIONS[currentRegion].system;
+  buildUnitSelects(region);
+}
+
+function buildUnitSelects(system) {
+  const data = UNIT_DATA[currentCategory];
+  const units = Object.keys(data.units);
+  // Preferred order: region-specific first
+  const preferred = system === 'imperial' ? data.imperial : data.metric;
+  const ordered = [...preferred.filter(u=>units.includes(u)), ...units.filter(u=>!preferred.includes(u))];
+
+  const fromSel = document.getElementById('unitFromSel');
+  const toSel   = document.getElementById('unitToSel');
+  fromSel.innerHTML = ordered.map(u=>`<option value="${u}">${u}</option>`).join('');
+  toSel.innerHTML   = ordered.map(u=>`<option value="${u}">${u}</option>`).join('');
+
+  // Smart defaults
+  if (ordered.length >= 2) {
+    fromSel.value = ordered[0];
+    toSel.value   = ordered[1];
+  }
+
+  buildQuickRefs();
+  convertUnit();
+}
+
+function convertUnit() {
+  const cat  = UNIT_DATA[currentCategory];
+  const fromU = document.getElementById('unitFromSel').value;
+  const toU   = document.getElementById('unitToSel').value;
+  const val   = parseFloat(document.getElementById('unitFrom').value);
+  if (isNaN(val)) return;
+
+  let result;
+
+  if (cat.special) { // Temperature
+    result = convertTemp(val, fromU, toU);
+  } else {
+    const fFactor = cat.units[fromU]?.factor || 1;
+    const tFactor = cat.units[toU]?.factor || 1;
+    result = val * fFactor / tFactor;
+  }
+
+  const fmt = n => {
+    if (Math.abs(n) > 1e9 || (Math.abs(n) < 1e-4 && n !== 0)) return n.toExponential(4);
+    return parseFloat(n.toPrecision(7)).toString();
+  };
+
+  document.getElementById('unitTo').value = fmt(result);
+  document.getElementById('unitResultBox').style.display = 'block';
+  document.getElementById('unitResultLarge').textContent = `${fmt(result)} ${fromU!==toU?toU:''}`;
+  document.getElementById('unitResultSub').textContent   = `${val} ${fromU} = ${fmt(result)} ${toU}`;
+}
+
+function convertTemp(val, from, to) {
+  let celsius;
+  switch(from) {
+    case 'Celsius':    celsius = val; break;
+    case 'Fahrenheit': celsius = (val - 32) * 5/9; break;
+    case 'Kelvin':     celsius = val - 273.15; break;
+    case 'Rankine':    celsius = (val - 491.67) * 5/9; break;
+  }
+  switch(to) {
+    case 'Celsius':    return celsius;
+    case 'Fahrenheit': return celsius * 9/5 + 32;
+    case 'Kelvin':     return celsius + 273.15;
+    case 'Rankine':    return (celsius + 273.15) * 9/5;
+  }
+}
+
+function swapUnit() {
+  const f = document.getElementById('unitFromSel');
+  const t = document.getElementById('unitToSel');
+  [f.value, t.value] = [t.value, f.value];
+  convertUnit();
+}
+
+function buildQuickRefs() {
+  const refs = UNIT_DATA[currentCategory].refs || [];
+  document.getElementById('quickRefs').innerHTML = refs.map(([from,to]) =>
+    `<div class="ref-item"><div class="ref-from">${from}</div><div class="ref-to">${to}</div></div>`
+  ).join('');
+}
+
+// ╔══════════════════════════════════════════╗
+// ║         TIME CONVERTER                   ║
+// ╚══════════════════════════════════════════╝
+const TIMEZONES = [
+  { label:'UTC',                    tz:'UTC',                     city:'UTC' },
+  { label:'New York (ET)',           tz:'America/New_York',        city:'New York' },
+  { label:'Los Angeles (PT)',        tz:'America/Los_Angeles',     city:'Los Angeles' },
+  { label:'Chicago (CT)',            tz:'America/Chicago',         city:'Chicago' },
+  { label:'São Paulo (BRT)',         tz:'America/Sao_Paulo',       city:'São Paulo' },
+  { label:'Mexico City (CST)',       tz:'America/Mexico_City',     city:'Mexico City' },
+  { label:'Toronto (ET)',            tz:'America/Toronto',         city:'Toronto' },
+  { label:'London (GMT/BST)',        tz:'Europe/London',           city:'London' },
+  { label:'Paris (CET/CEST)',        tz:'Europe/Paris',            city:'Paris' },
+  { label:'Berlin (CET/CEST)',       tz:'Europe/Berlin',           city:'Berlin' },
+  { label:'Moscow (MSK)',            tz:'Europe/Moscow',           city:'Moscow' },
+  { label:'Dubai (GST)',             tz:'Asia/Dubai',              city:'Dubai' },
+  { label:'Riyadh (AST)',            tz:'Asia/Riyadh',             city:'Riyadh' },
+  { label:'Kolkata (IST)',           tz:'Asia/Kolkata',            city:'Mumbai' },
+  { label:'Singapore (SGT)',         tz:'Asia/Singapore',          city:'Singapore' },
+  { label:'Shanghai (CST)',          tz:'Asia/Shanghai',           city:'Shanghai' },
+  { label:'Tokyo (JST)',             tz:'Asia/Tokyo',              city:'Tokyo' },
+  { label:'Seoul (KST)',             tz:'Asia/Seoul',              city:'Seoul' },
+  { label:'Sydney (AEST/AEDT)',      tz:'Australia/Sydney',        city:'Sydney' },
+  { label:'Auckland (NZST/NZDT)',    tz:'Pacific/Auckland',        city:'Auckland' },
+  { label:'Johannesburg (SAST)',     tz:'Africa/Johannesburg',     city:'Johannesburg' },
+  { label:'Lagos (WAT)',             tz:'Africa/Lagos',            city:'Lagos' },
+  { label:'Cairo (EET)',             tz:'Africa/Cairo',            city:'Cairo' },
+  { label:'Nairobi (EAT)',           tz:'Africa/Nairobi',          city:'Nairobi' },
+  { label:'Honolulu (HST)',          tz:'Pacific/Honolulu',        city:'Honolulu' },
+  { label:'Anchorage (AKT)',         tz:'America/Anchorage',       city:'Anchorage' },
+  { label:'Denver (MT)',             tz:'America/Denver',          city:'Denver' },
+  { label:'Phoenix (MST)',           tz:'America/Phoenix',         city:'Phoenix' },
+  { label:'Bangkok (ICT)',           tz:'Asia/Bangkok',            city:'Bangkok' },
+  { label:'Jakarta (WIB)',           tz:'Asia/Jakarta',            city:'Jakarta' },
+  { label:'Karachi (PKT)',           tz:'Asia/Karachi',            city:'Karachi' },
+  { label:'Dhaka (BST)',             tz:'Asia/Dhaka',              city:'Dhaka' },
+];
+
+const WORLD_CLOCK_CITIES = [
+  'New York (ET)','London (GMT/BST)','Paris (CET/CEST)','Dubai (GST)',
+  'Kolkata (IST)','Singapore (SGT)','Tokyo (JST)','Sydney (AEST/AEDT)',
+  'São Paulo (BRT)','Los Angeles (PT)','Moscow (MSK)','Johannesburg (SAST)',
+];
+
+function populateTzSelects() {
+  const from = document.getElementById('tzFrom');
+  const to   = document.getElementById('tzTo');
+  TIMEZONES.forEach(tz => {
+    from.innerHTML += `<option value="${tz.tz}">${tz.label}</option>`;
+    to.innerHTML   += `<option value="${tz.tz}">${tz.label}</option>`;
+  });
+  // Default from region
+  const r = REGIONS[currentRegion];
+  from.value = r.tz;
+  to.value   = 'UTC';
+
+  // Set date/time inputs to now
+  const now = new Date();
+  document.getElementById('timeDate').value  = now.toLocaleDateString('en-CA');
+  document.getElementById('timeInput').value = now.toTimeString().slice(0,5);
+  convertTime();
+}
+
+function convertTime() {
+  const fromTz = document.getElementById('tzFrom').value;
+  const toTz   = document.getElementById('tzTo').value;
+  const dateStr = document.getElementById('timeDate').value;
+  const timeStr = document.getElementById('timeInput').value;
+  if (!dateStr || !timeStr) return;
+
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const [hour, min] = timeStr.split(':').map(Number);
+
+  // Create date in fromTz
+  const sourceStr = `${dateStr}T${timeStr}:00`;
+  const sourceDate = new Date(sourceStr);
+
+  // Format in both timezones
+  const fmtOpts = { timeZone: fromTz, hour:'2-digit', minute:'2-digit', hour12:true };
+  const toOpts  = { timeZone: toTz,   hour:'2-digit', minute:'2-digit', hour12:true };
+  const datOpts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+
+  const resultTime = sourceDate.toLocaleTimeString('en-US', toOpts);
+  const resultDate = sourceDate.toLocaleDateString('en-US', {...datOpts, timeZone: toTz});
+  const fromLabel  = TIMEZONES.find(t=>t.tz===fromTz)?.label || fromTz;
+  const toLabel    = TIMEZONES.find(t=>t.tz===toTz)?.label   || toTz;
+
+  document.getElementById('timeResult').textContent    = `${resultTime}`;
+  document.getElementById('timeResultSub').textContent = `${resultDate} · ${fromLabel} → ${toLabel}`;
+}
+
+const WORLD_CLOCK_TZS = [
+  {city:'New York',  tz:'America/New_York'},
+  {city:'London',    tz:'Europe/London'},
+  {city:'Paris',     tz:'Europe/Paris'},
+  {city:'Dubai',     tz:'Asia/Dubai'},
+  {city:'Mumbai',    tz:'Asia/Kolkata'},
+  {city:'Singapore', tz:'Asia/Singapore'},
+  {city:'Tokyo',     tz:'Asia/Tokyo'},
+  {city:'Sydney',    tz:'Australia/Sydney'},
+  {city:'São Paulo', tz:'America/Sao_Paulo'},
+  {city:'Los Angeles',tz:'America/Los_Angeles'},
+  {city:'Moscow',    tz:'Europe/Moscow'},
+  {city:'Johannesburg',tz:'Africa/Johannesburg'},
+];
+
+function updateWorldClock() {
+  const now = new Date();
+  const container = document.getElementById('worldClock');
+  container.innerHTML = WORLD_CLOCK_TZS.map(({city, tz}) => {
+    const time = now.toLocaleTimeString('en-US', {timeZone:tz, hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false});
+    const date = now.toLocaleDateString('en-GB', {timeZone:tz, weekday:'short', day:'numeric', month:'short'});
+    const offsetDate = new Date(now.toLocaleString('en-US', {timeZone:tz}));
+    const utcDate    = new Date(now.toLocaleString('en-US', {timeZone:'UTC'}));
+    const diffH      = Math.round((offsetDate - utcDate) / 3600000);
+    const offsetStr  = diffH === 0 ? 'UTC' : (diffH > 0 ? `UTC+${diffH}` : `UTC${diffH}`);
+    return `
+      <div class="tz-card">
+        <div class="tz-offset">${offsetStr}</div>
+        <div class="tz-city">${city}</div>
+        <div class="tz-time">${time}</div>
+        <div class="tz-date">${date}</div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('clockTick').textContent = `· ${now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'})} local`;
+}
+
+// ╔══════════════════════════════════════════╗
+// ║              INIT                        ║
+// ╚══════════════════════════════════════════╝
+document.addEventListener('DOMContentLoaded', () => {
+  populateCurrencySelects();
+  fetchRates();
+  buildCategoryTabs();
+  buildUnitSelects('imperial');
+  populateTzSelects();
+  updateWorldClock();
+
+  // Live clock
+  setInterval(() => {
+    const activePanel = document.querySelector('.panel.active');
+    if (activePanel && activePanel.id === 'panel-time') updateWorldClock();
+  }, 1000);
+
+  // Try geolocation-based region
+  detectRegion();
+});
+
+async function detectRegion() {
+  try {
+    const res = await fetch('https://api.frankfurter.app/');
+    // No geo data here, that's fine - user can select manually
+  } catch(e) {}
+}
+
+// Currency convert on select change
+document.addEventListener('change', e => {
+  if (e.target.id === 'currFrom' || e.target.id === 'currTo') convertCurrency();
+});
+
+// ╔══════════════════════════════════════════╗
+// ║         TYPEWRITER LOGO EFFECT          ║
+// ╚══════════════════════════════════════════╝
+(function () {
+  const el     = document.getElementById('logoText');
+  const cursor = document.getElementById('logoCursor');
+
+  // Words to cycle — plain part + accented last char
+  const words = [
+    { plain: 'Convert', accent: 'X' },
+    { plain: 'Currenc', accent: 'Y' },
+    { plain: 'Unit', accent: 'S' },
+    { plain: 'Tim',     accent: 'E' },
+    { plain: 'Convert', accent: 'X' },
+  ];
+
+  let wIndex    = 0;
+  let cIndex    = 0;
+  let deleting  = false;
+  let rafId     = null;
+  let lastTime  = null;
+
+  // Timing config (ms)
+  const TYPE_SPEED    = 105;
+  const DELETE_SPEED  = 60;
+  const HOLD_TYPED    = 1600;  // pause after fully typed
+  const HOLD_DELETED  = 280;   // pause after fully deleted
+
+  // Easing: add slight jitter for organic feel
+  function jitter(base, range) {
+    return base + (Math.random() * range * 2 - range);
+  }
+
+  function getWord() { return words[wIndex]; }
+
+  function fullText() {
+    const w = getWord();
+    return w.plain + w.accent;
+  }
+
+  function renderAt(len) {
+    const w     = getWord();
+    const full  = w.plain + w.accent;
+    const text  = full.slice(0, len);
+    const pLen  = w.plain.length;
+
+    if (len <= pLen) {
+      // Only plain part visible
+      el.innerHTML = `<span style="-webkit-text-fill-color:var(--text);color:var(--text)">${text}</span>`;
+    } else {
+      // Plain + partial/full accent
+      const plainPart  = text.slice(0, pLen);
+      const accentPart = text.slice(pLen);
+      el.innerHTML =
+        `<span style="-webkit-text-fill-color:var(--text);color:var(--text)">${plainPart}</span>` +
+        `<span style="background:linear-gradient(135deg,var(--accent),var(--accent2));` +
+        `-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">${accentPart}</span>`;
+    }
+  }
+
+  function setCursorTyping() {
+    cursor.classList.remove('blinking');
+    cursor.classList.add('typing');
+  }
+
+  function setCursorBlinking() {
+    cursor.classList.remove('typing');
+    cursor.classList.add('blinking');
+  }
+
+  // Smooth scheduler using setTimeout chains with jitter
+  function scheduleNext(delay, fn) {
+    return setTimeout(fn, delay);
+  }
+
+  function typeChar() {
+    setCursorTyping();
+    cIndex++;
+    renderAt(cIndex);
+
+    if (cIndex === fullText().length) {
+      const isLast = wIndex === words.length - 1;
+      if (isLast) {
+        // Final word fully typed — hide cursor and stop
+        scheduleNext(400, () => {
+          cursor.style.display = 'none';
+        });
+      } else {
+        // Done typing — blink and hold, then delete
+        setCursorBlinking();
+        scheduleNext(HOLD_TYPED, () => {
+          deleting = true;
+          deleteChar();
+        });
+      }
+    } else {
+      scheduleNext(jitter(TYPE_SPEED, 30), typeChar);
+    }
+  }
+
+  function deleteChar() {
+    setCursorTyping();
+    cIndex--;
+    renderAt(cIndex);
+
+    if (cIndex === 0) {
+      // Done deleting — if last word reached, stop; else move to next
+      const isLast = wIndex === words.length - 1;
+      if (isLast) {
+        // Final word — just type it and stop
+        deleting = false;
+        wIndex   = words.length - 1;
+        scheduleNext(jitter(120, 40), typeChar);
+      } else {
+        setCursorBlinking();
+        scheduleNext(HOLD_DELETED, () => {
+          deleting = false;
+          wIndex   = wIndex + 1;
+          scheduleNext(jitter(120, 40), typeChar);
+        });
+      }
+    } else {
+      scheduleNext(jitter(DELETE_SPEED, 18), deleteChar);
+    }
+  }
+
+  // Kick off
+  scheduleNext(700, typeChar);
+})();
+</script>
+</body>
+</html>
