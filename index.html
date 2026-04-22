@@ -265,7 +265,6 @@
 
   .card-subtitle { color: var(--muted); font-size: 0.85rem; margin-top: 4px; }
 
-  /* Currency count badge */
   .currency-count-badge {
     display: inline-flex;
     align-items: center;
@@ -366,15 +365,23 @@
     transform: rotate(180deg);
   }
 
+  /* ── Result box with copy button ── */
   .result-box {
     background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.02));
     border: 1px solid rgba(201,168,76,0.25);
     border-radius: var(--radius-sm);
     padding: 20px 24px;
     margin-bottom: 20px;
+    position: relative;
   }
 
-  .result-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .result-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+  }
 
   .result-value {
     font-family: 'Manrope', serif;
@@ -382,9 +389,68 @@
     font-weight: 600;
     color: var(--accent2);
     line-height: 1.1;
+    padding-right: 48px; /* leave room for copy btn */
   }
 
   .result-subtext { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
+
+  /* Copy button */
+  .copy-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 34px;
+    height: 34px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 8px;
+    color: var(--accent);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .copy-btn:hover {
+    background: rgba(201,168,76,0.22);
+    border-color: var(--accent);
+    transform: scale(1.08);
+  }
+
+  .copy-btn.copied {
+    background: rgba(110,201,139,0.15);
+    border-color: var(--success);
+    color: var(--success);
+  }
+
+  /* Copy toast */
+  .copy-toast {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--surface2);
+    border: 1px solid var(--success);
+    color: var(--success);
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 9px 20px;
+    border-radius: 40px;
+    letter-spacing: 0.04em;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.25s ease;
+    z-index: 9999;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+
+  .copy-toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
 
   .convert-btn {
     width: 100%;
@@ -429,7 +495,6 @@
 
   .rate-chip strong { color: var(--text); }
 
-  /* Currency search box */
   .currency-search-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -625,6 +690,9 @@
 </head>
 <body>
 
+<!-- Toast notification -->
+<div class="copy-toast" id="copyToast">✓ Copied to clipboard</div>
+
 <header>
   <div class="logo">
     <div class="logo-icon">⚡</div>
@@ -705,7 +773,6 @@
           <span id="rateStatus">Loading rates from multiple sources…</span>
         </div>
 
-        <!-- Search/filter inputs -->
         <div class="currency-search-row">
           <div>
             <label style="display:block;font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-weight:500;">Search From Currency</label>
@@ -736,6 +803,7 @@
         </div>
 
         <div class="result-box" id="currResultBox" style="display:none">
+          <button class="copy-btn" id="copyCurrBtn" onclick="copyResult('currResultLarge', 'copyCurrBtn')" title="Copy result">⎘</button>
           <div class="result-label">Converted Amount</div>
           <div class="result-value" id="currResultLarge">—</div>
           <div class="result-subtext" id="currResultSub">—</div>
@@ -779,6 +847,7 @@
         </div>
 
         <div class="result-box" id="unitResultBox" style="display:none">
+          <button class="copy-btn" id="copyUnitBtn" onclick="copyResult('unitResultLarge', 'copyUnitBtn')" title="Copy result">⎘</button>
           <div class="result-label">Result</div>
           <div class="result-value" id="unitResultLarge">—</div>
           <div class="result-subtext" id="unitResultSub">—</div>
@@ -828,6 +897,7 @@
         </div>
 
         <div class="result-box" id="timeResultBox">
+          <button class="copy-btn" id="copyTimeBtn" onclick="copyTimeResult('copyTimeBtn')" title="Copy result">⎘</button>
           <div class="result-label">Converted Time</div>
           <div class="result-value" id="timeResult">—</div>
           <div class="result-subtext" id="timeResultSub">—</div>
@@ -855,6 +925,73 @@
 </footer>
 
 <script>
+// ══════════════════════════════════════════
+//  COPY TO CLIPBOARD
+// ══════════════════════════════════════════
+let toastTimer = null;
+
+function showToast(msg) {
+  const toast = document.getElementById('copyToast');
+  toast.textContent = msg || '✓ Copied to clipboard';
+  toast.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+}
+
+function copyResult(resultId, btnId) {
+  const el  = document.getElementById(resultId);
+  const btn = document.getElementById(btnId);
+  if (!el || el.textContent === '—') return;
+
+  navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+    btn.textContent = '✓';
+    btn.classList.add('copied');
+    showToast('✓ Copied to clipboard');
+    setTimeout(() => {
+      btn.textContent = '⎘';
+      btn.classList.remove('copied');
+    }, 2000);
+  }).catch(() => {
+    // Fallback for browsers that block clipboard
+    const ta = document.createElement('textarea');
+    ta.value = el.textContent.trim();
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = '✓';
+    btn.classList.add('copied');
+    showToast('✓ Copied to clipboard');
+    setTimeout(() => { btn.textContent = '⎘'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
+function copyTimeResult(btnId) {
+  const timeEl = document.getElementById('timeResult');
+  const subEl  = document.getElementById('timeResultSub');
+  const btn    = document.getElementById(btnId);
+  if (!timeEl || timeEl.textContent === '—') return;
+
+  const text = `${timeEl.textContent.trim()} — ${subEl.textContent.trim()}`;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓';
+    btn.classList.add('copied');
+    showToast('✓ Copied to clipboard');
+    setTimeout(() => { btn.textContent = '⎘'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    btn.textContent = '✓';
+    btn.classList.add('copied');
+    showToast('✓ Copied to clipboard');
+    setTimeout(() => { btn.textContent = '⎘'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+
 // ══════════════════════════════════════════
 //  REGION CONFIG
 // ══════════════════════════════════════════
@@ -918,10 +1055,8 @@ function switchTab(name) {
 }
 
 // ══════════════════════════════════════════
-//  CURRENCY DATA  (100 currencies, sorted A–Z by code)
+//  CURRENCY DATA
 // ══════════════════════════════════════════
-
-// Each entry: [code, name, symbol]
 const CURRENCY_LIST = [
   ['AED', 'UAE Dirham',                 'د.إ'],
   ['AFN', 'Afghan Afghani',             '؋'],
@@ -1074,7 +1209,6 @@ const CURRENCY_LIST = [
   ['ZWL', 'Zimbabwean Dollar',          'Z$'],
 ];
 
-// Build lookup maps
 const CURRENCY_NAMES   = {};
 const CURRENCY_SYMBOLS = {};
 CURRENCY_LIST.forEach(([code, name, sym]) => {
@@ -1084,10 +1218,6 @@ CURRENCY_LIST.forEach(([code, name, sym]) => {
 
 const ALL_CURRENCIES = CURRENCY_LIST.map(([code]) => code);
 
-// ══════════════════════════════════════════
-//  STATIC FALLBACK RATES (USD base, ~2025)
-//  Covers every code in CURRENCY_LIST
-// ══════════════════════════════════════════
 const FALLBACK_RATES = {
   usd:1,      aed:3.673,  afn:71.3,   all:93.2,   amd:389,    ang:1.79,
   aoa:830,    ars:900,    aud:1.528,  azn:1.70,   bam:1.80,   bbd:2.00,
@@ -1119,7 +1249,6 @@ const FALLBACK_RATES = {
 let ratesCache = {};
 let ratesDate  = '';
 
-// ── Populate dropdowns
 function buildCurrencyOption(code) {
   const name = CURRENCY_NAMES[code] || code;
   const sym  = CURRENCY_SYMBOLS[code] || '';
@@ -1137,7 +1266,6 @@ function populateCurrencySelects() {
   document.getElementById('currencyCountBadge').textContent = `${ALL_CURRENCIES.length} currencies`;
 }
 
-// ── Search/filter
 function filterCurrencies(side) {
   const query  = document.getElementById(side === 'from' ? 'searchFrom' : 'searchTo').value.trim().toLowerCase();
   const selId  = side === 'from' ? 'currFrom' : 'currTo';
@@ -1160,7 +1288,6 @@ function filterCurrencies(side) {
 function syncSearchFromSelect() { document.getElementById('searchFrom').value = ''; filterCurrencies('from'); }
 function syncSearchToSelect()   { document.getElementById('searchTo').value = '';   filterCurrencies('to'); }
 
-// ── Rate fetching
 function getRate(from, to) {
   const fromKey = from.toLowerCase();
   const toKey   = to.toLowerCase();
@@ -1180,7 +1307,6 @@ async function fetchRates() {
   const timestampEl = document.getElementById('rateTimestamp');
   statusEl.textContent = 'Fetching live exchange rates…';
 
-  // Source 1: ExchangeRate-API (open tier) — closest to Google's mid-market rates, updates every 10 min
   try {
     const data = await tryFetch('https://open.er-api.com/v6/latest/USD');
     if (data && data.rates) {
@@ -1194,9 +1320,8 @@ async function fetchRates() {
       statusEl.textContent    = '✓ Live mid-market rates';
       convertCurrency(); buildPopularRates(); return;
     }
-  } catch(e) { /* next */ }
+  } catch(e) {}
 
-  // Source 2: Frankfurter / European Central Bank — daily fix, very accurate
   try {
     const data = await tryFetch('https://api.frankfurter.app/latest?base=USD');
     if (data && data.rates) {
@@ -1208,9 +1333,8 @@ async function fetchRates() {
       statusEl.textContent    = '✓ Live rates (European Central Bank daily fix)';
       convertCurrency(); buildPopularRates(); return;
     }
-  } catch(e) { /* next */ }
+  } catch(e) {}
 
-  // Source 3: jsDelivr CDN (fawazahmed0 community data)
   try {
     const data = await tryFetch('https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json');
     if (data && data.usd) {
@@ -1221,9 +1345,8 @@ async function fetchRates() {
       statusEl.textContent    = '✓ Live rates loaded (community CDN)';
       convertCurrency(); buildPopularRates(); return;
     }
-  } catch(e) { /* fallback */ }
+  } catch(e) {}
 
-  // Static fallback
   ratesCache = { ...FALLBACK_RATES };
   statusEl.textContent    = '⚠ Live rates unavailable — using recent estimates';
   timestampEl.textContent = `Estimated rates · ${ALL_CURRENCIES.length} currencies`;
