@@ -686,6 +686,75 @@
     .tab-btn { flex: 1; justify-content: center; padding: 10px 14px; }
     .currency-search-row { grid-template-columns: 1fr; }
   }
+
+  /* ── Honorable Mentions ── */
+  .hm-stat-strip {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .hm-stat-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+  }
+  .hm-stat-label { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; font-weight: 500; }
+  .hm-stat-val { font-family: 'Manrope', serif; font-size: 1.4rem; font-weight: 600; color: var(--text); line-height: 1.2; }
+  .hm-stat-sub { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+
+  .hm-tbl-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 32px;
+  }
+  .hm-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; table-layout: fixed; }
+  .hm-table thead th {
+    background: var(--surface2);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .hm-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .hm-table tbody tr:last-child { border-bottom: none; }
+  .hm-table tbody tr:hover { background: var(--surface2); }
+  .hm-table tbody td { padding: 11px 14px; vertical-align: middle; color: var(--text); }
+  .hm-rank { font-weight: 600; color: var(--muted); font-size: 0.78rem; }
+  .hm-tool-link { color: var(--accent2); text-decoration: none; font-weight: 600; }
+  .hm-tool-link:hover { text-decoration: underline; }
+  .hm-desc { color: var(--muted); line-height: 1.5; }
+  .hm-cat-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+  }
+  .hm-cat-dev  { background: rgba(55,138,221,0.15); color: #6aabf0; border: 1px solid rgba(55,138,221,0.3); }
+  .hm-cat-text { background: rgba(99,153,34,0.15);  color: #8ec94a; border: 1px solid rgba(99,153,34,0.3); }
+  .hm-cat-img  { background: rgba(239,159,39,0.15); color: #f0b050; border: 1px solid rgba(239,159,39,0.3); }
+  .hm-cat-data { background: rgba(127,119,221,0.15);color: #a89fee; border: 1px solid rgba(127,119,221,0.3); }
+  .hm-cat-util { background: rgba(29,158,117,0.15); color: #3ccfa0; border: 1px solid rgba(29,158,117,0.3); }
+  .hm-cat-sec  { background: rgba(226,75,74,0.15);  color: #f08080; border: 1px solid rgba(226,75,74,0.3); }
+  .hm-users-wrap { display: flex; align-items: center; gap: 8px; }
+  .hm-users-bar { height: 6px; border-radius: 3px; flex-shrink: 0; opacity: 0.75; }
+  .hm-users-val { font-size: 0.78rem; color: var(--muted); white-space: nowrap; }
+
+  .hm-chart-section { margin-top: 8px; }
+  .hm-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 20px; }
+  .hm-leg-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--muted); }
+  .hm-leg-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+
 </style>
 </head>
 <body>
@@ -751,6 +820,9 @@
     </button>
     <button class="tab-btn" onclick="switchTab('time')" id="tab-time">
       <span class="tab-icon">🕰</span> Time
+    </button>
+    <button class="tab-btn" onclick="switchTab('mentions')" id="tab-mentions">
+      <span class="tab-icon">🏆</span> Honorable Mentions
     </button>
   </div>
 
@@ -908,6 +980,81 @@
       </div>
     </div>
 
+    <!-- HONORABLE MENTIONS PANEL -->
+    <div class="panel" id="panel-mentions">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">
+            <div class="icon-badge">&#x1F3C6;</div>
+            Honorable Mentions
+          </div>
+          <div class="card-subtitle">The best free utility tools on the web &mdash; ranked by estimated monthly active users</div>
+        </div>
+
+        <div class="hm-stat-strip">
+          <div class="hm-stat-card">
+            <div class="hm-stat-label">Most-used tool</div>
+            <div class="hm-stat-val">Google Translate</div>
+            <div class="hm-stat-sub">~500M monthly users</div>
+          </div>
+          <div class="hm-stat-card">
+            <div class="hm-stat-label">Combined reach</div>
+            <div class="hm-stat-val">1.6B+</div>
+            <div class="hm-stat-sub">estimated monthly users</div>
+          </div>
+          <div class="hm-stat-card">
+            <div class="hm-stat-label">Top category</div>
+            <div class="hm-stat-val">Text &amp; writing</div>
+            <div class="hm-stat-sub">6 of 20 tools</div>
+          </div>
+          <div class="hm-stat-card">
+            <div class="hm-stat-label">Free tools</div>
+            <div class="hm-stat-val">20 / 20</div>
+            <div class="hm-stat-sub">all free to use</div>
+          </div>
+        </div>
+
+        <div class="hm-tbl-wrap">
+          <table class="hm-table">
+            <colgroup>
+              <col style="width:40px">
+              <col style="width:148px">
+              <col style="width:112px">
+              <col>
+              <col style="width:180px">
+            </colgroup>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Tool</th>
+                <th>Category</th>
+                <th>What it does</th>
+                <th>Est. monthly users</th>
+              </tr>
+            </thead>
+            <tbody id="hmTableBody"></tbody>
+          </table>
+        </div>
+
+        <div class="hm-chart-section">
+          <h3 style="font-family:'Manrope',serif;font-size:1.2rem;font-weight:500;margin:0 0 4px;color:var(--text);">Usage comparison</h3>
+          <p style="font-size:0.82rem;color:var(--muted);margin:0 0 20px;">Estimated monthly active users across all 20 tools (millions)</p>
+          <div class="hm-legend">
+            <span class="hm-leg-item"><span class="hm-leg-dot" style="background:#378ADD"></span>Developer</span>
+            <span class="hm-leg-item"><span class="hm-leg-dot" style="background:#639922"></span>Text &amp; writing</span>
+            <span class="hm-leg-item"><span class="hm-leg-dot" style="background:#EF9F27"></span>Image &amp; media</span>
+            <span class="hm-leg-item"><span class="hm-leg-dot" style="background:#7F77DD"></span>Data &amp; files</span>
+            <span class="hm-leg-item"><span class="hm-leg-dot" style="background:#1D9E75"></span>Utility</span>
+            <span class="hm-leg-item"><span class="hm-leg-dot" style="background:#E24B4A"></span>Security</span>
+          </div>
+          <div style="position:relative;width:100%;height:580px;">
+            <canvas id="hmChart" role="img" aria-label="Horizontal bar chart of monthly users for 20 online tools. Google Translate leads at 500M.">Monthly users from 500M down to 5M.</canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </main>
 
@@ -924,6 +1071,7 @@
   </div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
 // ══════════════════════════════════════════
 //  COPY TO CLIPBOARD
@@ -1850,6 +1998,115 @@ document.addEventListener('change', e => {
 
   setTimeout(typeChar, 700);
 })();
+
+
+// ══════════════════════════════════════════
+//  HONORABLE MENTIONS
+// ══════════════════════════════════════════
+const HM_TOOLS = [
+  { rank:1,  name:'Google Translate', url:'https://translate.google.com',      cat:'Text & writing', catClass:'hm-cat-text', catColor:'#639922', desc:'Instant translation across 130+ languages powered by neural machine learning.', users:500 },
+  { rank:2,  name:'Canva',            url:'https://www.canva.com',              cat:'Image & media',  catClass:'hm-cat-img',  catColor:'#EF9F27', desc:'Drag-and-drop design platform for graphics, presentations, and social media assets.', users:180 },
+  { rank:3,  name:'WolframAlpha',     url:'https://www.wolframalpha.com',       cat:'Data & files',   catClass:'hm-cat-data', catColor:'#7F77DD', desc:'Computational knowledge engine — answers maths, science, and data queries directly.', users:150 },
+  { rank:4,  name:'Grammarly',        url:'https://www.grammarly.com',          cat:'Text & writing', catClass:'hm-cat-text', catColor:'#639922', desc:'Real-time grammar, spelling, and style checker with tone and clarity suggestions.', users:140 },
+  { rank:5,  name:'Smallpdf',         url:'https://smallpdf.com',               cat:'Data & files',   catClass:'hm-cat-data', catColor:'#7F77DD', desc:'Compress, convert, merge, split, and edit PDF files entirely in the browser.', users:80 },
+  { rank:6,  name:'Regex101',         url:'https://regex101.com',               cat:'Developer',      catClass:'hm-cat-dev',  catColor:'#378ADD', desc:'Interactive regex builder and debugger with plain-English explanation of each expression.', users:60 },
+  { rank:7,  name:'TinyPNG',          url:'https://tinypng.com',                cat:'Image & media',  catClass:'hm-cat-img',  catColor:'#EF9F27', desc:'Smart lossy compression for PNG and JPEG images — no visible quality loss.', users:55 },
+  { rank:8,  name:'JSONLint',         url:'https://jsonlint.com',               cat:'Developer',      catClass:'hm-cat-dev',  catColor:'#378ADD', desc:'Paste JSON to instantly validate, format, and pretty-print it online.', users:50 },
+  { rank:9,  name:'Remove.bg',        url:'https://www.remove.bg',              cat:'Image & media',  catClass:'hm-cat-img',  catColor:'#EF9F27', desc:'AI-powered background remover for photos — one click delivers a clean cutout.', users:45 },
+  { rank:10, name:'Epoch Converter',  url:'https://www.epochconverter.com',     cat:'Utility',        catClass:'hm-cat-util', catColor:'#1D9E75', desc:'Convert Unix timestamps to human-readable dates and vice versa instantly.', users:40 },
+  { rank:11, name:'Squoosh',          url:'https://squoosh.app',                cat:'Image & media',  catClass:'hm-cat-img',  catColor:'#EF9F27', desc:'Browser-based image compression with side-by-side comparison and format conversion.', users:35 },
+  { rank:12, name:'Base64 Decode',    url:'https://www.base64decode.org',       cat:'Developer',      catClass:'hm-cat-dev',  catColor:'#378ADD', desc:'Encode and decode Base64 strings instantly with no server round-trip.', users:30 },
+  { rank:13, name:'Carbon',           url:'https://carbon.now.sh',              cat:'Developer',      catClass:'hm-cat-dev',  catColor:'#378ADD', desc:'Create beautiful, shareable images of source code snippets for documentation or social.', users:28 },
+  { rank:14, name:'ILoveIMG',         url:'https://www.iloveimg.com',           cat:'Image & media',  catClass:'hm-cat-img',  catColor:'#EF9F27', desc:'Resize, crop, compress, and convert images in bulk — all in one place online.', users:25 },
+  { rank:15, name:'Pastebin',         url:'https://pastebin.com',               cat:'Utility',        catClass:'hm-cat-util', catColor:'#1D9E75', desc:'Share plain text, code snippets, and logs via short, shareable public links.', users:22 },
+  { rank:16, name:'Crontab Guru',     url:'https://crontab.guru',               cat:'Developer',      catClass:'hm-cat-dev',  catColor:'#378ADD', desc:'Interactive cron schedule expression editor with human-readable plain-English preview.', users:18 },
+  { rank:17, name:'Hemingway Editor', url:'https://hemingwayapp.com',           cat:'Text & writing', catClass:'hm-cat-text', catColor:'#639922', desc:'Highlights overly complex sentences and passive voice to improve writing readability.', users:15 },
+  { rank:18, name:'Wordcounter',      url:'https://wordcounter.net',            cat:'Text & writing', catClass:'hm-cat-text', catColor:'#639922', desc:'Live word and character counter with readability grade, keyword density, and speaking time.', users:12 },
+  { rank:19, name:'ScreenToGif',      url:'https://www.screentogif.com',        cat:'Utility',        catClass:'hm-cat-util', catColor:'#1D9E75', desc:'Record, edit, and export screen captures as animated GIF, video, or WebP.', users:8  },
+  { rank:20, name:'HaveIBeenPwned',   url:'https://haveibeenpwned.com',         cat:'Security',       catClass:'hm-cat-sec',  catColor:'#E24B4A', desc:'Check if your email address or password appeared in any known data breach.', users:5  },
+];
+
+function buildHMTable() {
+  const tbody = document.getElementById('hmTableBody');
+  if (!tbody) return;
+  const maxU = 500;
+  tbody.innerHTML = HM_TOOLS.map(t => {
+    const barW = Math.round((t.users / maxU) * 130);
+    const label = t.users >= 1000 ? (t.users/1000).toFixed(1)+'B' : t.users+'M';
+    return `<tr>
+      <td class="hm-rank">${t.rank}</td>
+      <td><a class="hm-tool-link" href="${t.url}" target="_blank" rel="noopener">${t.name}</a></td>
+      <td><span class="hm-cat-badge ${t.catClass}">${t.cat}</span></td>
+      <td class="hm-desc">${t.desc}</td>
+      <td>
+        <div class="hm-users-wrap">
+          <div class="hm-users-bar" style="width:${barW}px;background:${t.catColor};"></div>
+          <span class="hm-users-val">~${label}</span>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function buildHMChart() {
+  const canvas = document.getElementById('hmChart');
+  if (!canvas || !window.Chart) return;
+  const reversed = [...HM_TOOLS].reverse();
+  new Chart(canvas, {
+    type: 'bar',
+    data: {
+      labels: reversed.map(t => t.name),
+      datasets: [{
+        label: 'Monthly users (M)',
+        data: reversed.map(t => t.users),
+        backgroundColor: reversed.map(t => t.catColor + 'BB'),
+        borderColor: reversed.map(t => t.catColor),
+        borderWidth: 1,
+        borderRadius: 4,
+      }]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: ctx => {
+              const v = ctx.raw;
+              return ' ~' + (v >= 1000 ? (v/1000).toFixed(1)+'B' : v+'M') + ' monthly users';
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(200,200,200,0.08)' },
+          ticks: { color: '#8885a0', font: { size: 11 }, callback: v => v + 'M' },
+          border: { display: false }
+        },
+        y: {
+          grid: { display: false },
+          ticks: { color: '#8885a0', font: { size: 11 } },
+          border: { display: false }
+        }
+      }
+    }
+  });
+}
+
+// Extend switchTab to init chart lazily on first visit
+const _origSwitchTab = switchTab;
+let hmChartBuilt = false;
+switchTab = function(name) {
+  _origSwitchTab(name);
+  if (name === 'mentions' && !hmChartBuilt) {
+    buildHMTable();
+    setTimeout(() => { buildHMChart(); hmChartBuilt = true; }, 80);
+  }
+};
+
 </script>
 </body>
 </html>
