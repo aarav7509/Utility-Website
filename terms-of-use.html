@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ConvertX — Terms of Use</title>
+<meta name="description" content="Terms of Use for ConvertX — the universal currency, unit and time converter.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #0c0c10;
+    --surface:  #13131a;
+    --surface2: #1a1a25;
+    --border:   #2a2a38;
+    --accent:   #c9a84c;
+    --accent2:  #e8c97e;
+    --text:     #f0ede8;
+    --muted:    #8885a0;
+    --danger:   #e07070;
+    --success:  #6ec98b;
+    --radius:   14px;
+    --radius-sm:8px;
+    --shadow:   0 8px 40px rgba(0,0,0,0.5);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Manrope', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 15% 10%, rgba(201,168,76,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 50% at 85% 80%, rgba(120,100,200,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 40% at 50% 50%, rgba(201,168,76,0.03) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body > * { position: relative; z-index: 1; }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 48px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(12,12,16,0.85);
+    backdrop-filter: blur(20px);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .logo {
+    font-family: 'Manrope', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .logo .gold {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+
+
+  /* ── HERO BAND ── */
+  .hero-band {
+    border-bottom: 1px solid var(--border);
+    padding: 56px 48px 48px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .page-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 40px;
+    padding: 5px 14px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--accent2);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .page-eyebrow::before {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+  }
+
+  .hero-band h1 {
+    font-family: 'Manrope', serif;
+    font-size: clamp(2.6rem, 5vw, 4rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 14px;
+  }
+
+  .hero-band h1 em {
+    font-style: italic;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-band p {
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 520px;
+    line-height: 1.65;
+  }
+
+  .hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 28px;
+  }
+
+  .meta-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 40px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .meta-pill .dot {
+    width: 7px; height: 7px;
+    background: var(--success);
+    border-radius: 50%;
+    box-shadow: 0 0 6px var(--success);
+    animation: pulse 2s ease infinite;
+    flex-shrink: 0;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .meta-pill strong { color: var(--text); font-weight: 500; }
+
+  /* ── LAYOUT ── */
+  .layout {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 48px 48px 96px;
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 44px;
+    align-items: start;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    position: sticky;
+    top: 88px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .sidebar-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0 4px;
+  }
+
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .toc a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    text-decoration: none;
+    border-left: 2px solid transparent;
+    transition: color 0.2s, background 0.2s, border-color 0.2s;
+    line-height: 1.3;
+  }
+
+  .toc a:hover { color: var(--text); background: rgba(255,255,255,0.03); }
+
+  .toc a.toc-active {
+    color: var(--accent2);
+    background: rgba(201,168,76,0.06);
+    border-left-color: var(--accent);
+  }
+
+  .toc .num {
+    font-size: 0.67rem;
+    font-weight: 700;
+    color: var(--muted);
+    min-width: 16px;
+    opacity: 0.65;
+  }
+
+  .toc a.toc-active .num { color: var(--accent); opacity: 1; }
+  .toc-divider { height: 1px; background: var(--border); }
+
+  .sidebar-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+  }
+
+  .sidebar-card h4 {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .sidebar-card p {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.55;
+    margin-bottom: 14px;
+  }
+
+  .btn-sm {
+    display: block;
+    text-align: center;
+    background: linear-gradient(135deg, var(--accent), #b8932a);
+    color: #0c0c10;
+    font-size: 0.82rem;
+    font-weight: 600;
+    padding: 9px 14px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .btn-sm:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ── CONTENT ── */
+  .content { min-width: 0; }
+
+  .summary-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius-sm);
+    padding: 18px 22px;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.75;
+    margin-bottom: 44px;
+  }
+
+  .summary-box strong { color: var(--text); font-weight: 500; }
+
+  .section {
+    margin-bottom: 50px;
+    scroll-margin-top: 100px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-badge {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, rgba(201,168,76,0.14), rgba(201,168,76,0.03));
+    border: 1px solid rgba(201,168,76,0.22);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--accent2);
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Manrope', serif;
+    font-size: 1.65rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.3px;
+    line-height: 1.15;
+  }
+
+  .section p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.8;
+    margin-bottom: 12px;
+  }
+
+  .section p:last-child { margin-bottom: 0; }
+  .section p strong { color: var(--text); font-weight: 500; }
+
+  .section a {
+    color: var(--accent2);
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .section a:hover { opacity: 0.8; text-decoration: underline; }
+
+  .item-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 16px 0;
+  }
+
+  .item-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  .item-list li::before {
+    content: '';
+    width: 5px; height: 5px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-top: 9px;
+    flex-shrink: 0;
+  }
+
+  .item-list li strong { color: var(--text); font-weight: 500; }
+
+  .callout {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+    margin: 18px 0;
+    font-size: 0.86rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  .callout.warning { border-left: 3px solid #e8a34c; }
+  .callout.info    { border-left: 3px solid var(--accent); }
+  .callout.success { border-left: 3px solid var(--success); }
+
+  .callout-icon { font-size: 1rem; margin-top: 1px; flex-shrink: 0; line-height: 1; }
+  .callout strong { color: var(--text); font-weight: 500; }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 18px 0;
+  }
+
+  .mini-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 18px;
+  }
+
+  .mini-card h4 {
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .mini-card.allowed  h4 { color: var(--success); }
+  .mini-card.disallowed h4 { color: var(--danger); }
+
+  .mini-card p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0 !important;
+  }
+
+  /* ── BOTTOM CTA ── */
+  .cta-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 56px;
+    box-shadow: var(--shadow);
+  }
+
+  .cta-block h3 {
+    font-family: 'Manrope', serif;
+    font-size: 1.55rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 5px;
+  }
+
+  .cta-block p { font-size: 0.88rem; color: var(--muted); margin: 0 !important; }
+
+  .cta-btn {
+    background: linear-gradient(135deg, var(--accent), #b8932a);
+    color: #0c0c10;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 12px 28px;
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    white-space: nowrap;
+    transition: opacity 0.2s, transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .cta-btn:hover { opacity: 0.9; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.3); }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 32px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  .footer-logo {
+    font-family: 'Manrope', serif;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+  .footer-links a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--accent2); }
+  .footer-links a.active { color: var(--accent2); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: 1fr; padding: 32px 24px 64px; gap: 0; }
+    .sidebar { position: static; margin-bottom: 32px; }
+    .two-col { grid-template-columns: 1fr; }
+    .hero-band { padding: 40px 24px 36px; }
+    header { padding: 16px 24px; }
+    footer { padding: 24px; }
+    .toc { display: none; }
+  }
+
+  @media (max-width: 520px) {
+    nav a:not(.nav-cta) { display: none; }
+    .cta-block { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon">⚡</div>
+    Convert<span class="gold">X</span>
+  </a>
+
+</header>
+
+<!-- HERO -->
+<div class="hero-band">
+  <div class="page-eyebrow">Legal Document</div>
+  <h1>Terms of <em>Use</em></h1>
+  <p>Please read these terms carefully before using ConvertX. By accessing our platform, you agree to be bound by these conditions.</p>
+  <div class="hero-meta">
+    <div class="meta-pill">
+      <div class="dot"></div>
+      Last updated: <strong>January 15, 2025</strong>
+    </div>
+    <div class="meta-pill">Version: <strong>3.2</strong></div>
+    <div class="meta-pill">Applies to <strong>all users</strong></div>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-label">On this page</div>
+    <div class="toc" id="toc">
+      <a href="#acceptance" class="toc-active"><span class="num">01</span>Acceptance of Terms</a>
+      <div class="toc-divider"></div>
+      <a href="#services"><span class="num">02</span>Use of Services</a>
+      <div class="toc-divider"></div>
+      <a href="#acceptable"><span class="num">03</span>Acceptable Use</a>
+      <div class="toc-divider"></div>
+      <a href="#ip"><span class="num">04</span>Intellectual Property</a>
+      <div class="toc-divider"></div>
+      <a href="#privacy"><span class="num">05</span>Privacy &amp; Data</a>
+      <div class="toc-divider"></div>
+      <a href="#disclaimer"><span class="num">06</span>Disclaimers</a>
+      <div class="toc-divider"></div>
+      <a href="#liability"><span class="num">07</span>Limitation of Liability</a>
+      <div class="toc-divider"></div>
+      <a href="#termination"><span class="num">08</span>Termination</a>
+      <div class="toc-divider"></div>
+      <a href="#changes"><span class="num">09</span>Changes to Terms</a>
+      <div class="toc-divider"></div>
+      <a href="#contact"><span class="num">10</span>Contact Us</a>
+    </div>
+
+    <div class="sidebar-card">
+      <h4>Have a question?</h4>
+      <p>Our team is happy to clarify anything in these terms.</p>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="content">
+
+    <div class="summary-box">
+      <strong>Summary:</strong> By using ConvertX, you agree to use our tools responsibly, respect our intellectual property, and acknowledge that conversion services are provided as-is. These terms govern your relationship with us — please read them fully before proceeding.
+    </div>
+
+    <section class="section" id="acceptance">
+      <div class="section-header">
+        <div class="section-badge">01</div>
+        <h2 class="section-title">Acceptance of Terms</h2>
+      </div>
+      <p>By accessing or using any part of the ConvertX platform — including our website, conversion tools, APIs, and related services — you confirm that you have read, understood, and agreed to be bound by these Terms of Use ("Terms").</p>
+      <p>If you are using our services on behalf of an organisation, you represent and warrant that you have the authority to bind that organisation to these Terms. In that case, "you" and "your" refers to that organisation.</p>
+      <p>If you do not agree to these Terms, <strong>you must not use our services.</strong></p>
+    </section>
+
+    <section class="section" id="services">
+      <div class="section-header">
+        <div class="section-badge">02</div>
+        <h2 class="section-title">Use of Services</h2>
+      </div>
+      <p>ConvertX provides online tools that allow users to convert currencies, units of measurement, and time zones in real time. Our services are available for personal and commercial use, subject to the conditions outlined in these Terms.</p>
+      <p>You are responsible for ensuring that your use of our services complies with all applicable laws and regulations in your jurisdiction. You agree that:</p>
+      <ul class="item-list">
+        <li>You will use our tools only for their intended lawful purposes.</li>
+        <li>You will not attempt to bypass any technical limits, rate limits, or access restrictions on our platform.</li>
+        <li>You will not use automated tools, bots, or scripts to access our services unless explicitly permitted via our API terms.</li>
+        <li>You will not use our platform in any manner that could damage, disable, overburden, or impair our servers or networks.</li>
+      </ul>
+      <div class="callout info">
+        <span class="callout-icon">ℹ</span>
+        <span><strong>Exchange rate data:</strong> Currency rates are sourced from live third-party APIs (Open Exchange Rates, ECB via Frankfurter, and community CDNs). ConvertX does not guarantee the accuracy or timeliness of these rates — always verify with your financial institution before transacting.</span>
+      </div>
+    </section>
+
+    <section class="section" id="acceptable">
+      <div class="section-header">
+        <div class="section-badge">03</div>
+        <h2 class="section-title">Acceptable Use Policy</h2>
+      </div>
+      <p>To ensure a fair and safe environment for all users, the following outlines what is and is not permitted when using ConvertX:</p>
+      <div class="two-col">
+        <div class="mini-card allowed">
+          <h4>✓ Permitted Uses</h4>
+          <p>Personal finance calculations, business currency conversions, academic unit conversions, travel planning, development integrations with prior agreement, and embedding our tools with attribution.</p>
+        </div>
+        <div class="mini-card disallowed">
+          <h4>✕ Prohibited Uses</h4>
+          <p>Financial fraud, scraping at scale, reselling our data feeds, using our rates as a sole basis for regulated financial transactions, misrepresenting our data, or any use that violates applicable law.</p>
+        </div>
+      </div>
+      <div class="callout warning">
+        <span class="callout-icon">⚠</span>
+        <span>Violation of this policy may result in immediate suspension of your access. We reserve the right to refuse service to anyone at our discretion, with or without notice.</span>
+      </div>
+    </section>
+
+    <section class="section" id="ip">
+      <div class="section-header">
+        <div class="section-badge">04</div>
+        <h2 class="section-title">Intellectual Property</h2>
+      </div>
+      <p>All content on the ConvertX platform — including the website design, interface, typography, graphics, logos, software, and conversion algorithms — is the exclusive property of ConvertX or its licensors and is protected by applicable copyright, trademark, and intellectual property laws.</p>
+      <p>You are granted a limited, non-exclusive, non-transferable licence to access and use our platform for its intended purpose. This licence does not include:</p>
+      <ul class="item-list">
+        <li>Any resale or commercial exploitation of our services or content without prior written agreement.</li>
+        <li>Copying, reproducing, or distributing our software or interface design.</li>
+        <li>Reverse engineering, decompiling, or attempting to extract source code from our platform.</li>
+        <li>Creating derivative works based on our proprietary technology or user interface.</li>
+      </ul>
+    </section>
+
+    <section class="section" id="privacy">
+      <div class="section-header">
+        <div class="section-badge">05</div>
+        <h2 class="section-title">Privacy &amp; Data</h2>
+      </div>
+      <p>Your privacy matters to us. Our handling of personal data is governed by our <a href="privacy-policy.html">Privacy Policy</a>, which is incorporated into these Terms by reference.</p>
+      <ul class="item-list">
+        <li><strong>No account required:</strong> All core features are available without registration. We do not require personal data for basic conversions.</li>
+        <li><strong>Region preference:</strong> Your selected region is stored locally in your browser only — it is never transmitted to our servers.</li>
+        <li><strong>Cookies:</strong> We use essential cookies for platform functionality and, with your consent, analytics cookies to improve our services.</li>
+        <li><strong>No selling of data:</strong> We do not sell, rent, or trade any personal data to third parties under any circumstances.</li>
+      </ul>
+    </section>
+
+    <section class="section" id="disclaimer">
+      <div class="section-header">
+        <div class="section-badge">06</div>
+        <h2 class="section-title">Disclaimers</h2>
+      </div>
+      <p>ConvertX provides its services on an <strong>"as is" and "as available"</strong> basis, without warranties of any kind — either express or implied. To the maximum extent permitted by applicable law, we disclaim all warranties including merchantability, fitness for a particular purpose, or non-infringement.</p>
+      <ul class="item-list">
+        <li>We do not guarantee that the services will be uninterrupted, error-free, or completely secure.</li>
+        <li>Currency rates or conversion results may not be 100% accurate or suitable for regulated financial use.</li>
+        <li>Scheduled or emergency maintenance may cause temporary outages without prior notice.</li>
+      </ul>
+      <div class="callout warning">
+        <span class="callout-icon">⚠</span>
+        <span><strong>Not financial advice:</strong> ConvertX is an informational tool. Exchange rate data is for reference only. Nothing on this platform constitutes financial, investment, tax, or legal advice. Always consult a qualified professional before making financial decisions.</span>
+      </div>
+    </section>
+
+    <section class="section" id="liability">
+      <div class="section-header">
+        <div class="section-badge">07</div>
+        <h2 class="section-title">Limitation of Liability</h2>
+      </div>
+      <p>To the fullest extent permitted by law, ConvertX, its officers, directors, employees, and affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages — including loss of data, loss of profits, or business interruption — arising from your use of or inability to use our services.</p>
+      <p>In no event shall our total aggregate liability to you for all claims exceed the amount you paid us (if any) in the twelve (12) months preceding the claim.</p>
+      <div class="callout">
+        <span class="callout-icon">ℹ</span>
+        <span>Some jurisdictions do not allow the exclusion of certain warranties or limitations on liability. In such cases, our liability will be limited to the maximum extent permitted by applicable law.</span>
+      </div>
+    </section>
+
+    <section class="section" id="termination">
+      <div class="section-header">
+        <div class="section-badge">08</div>
+        <h2 class="section-title">Termination</h2>
+      </div>
+      <p>We reserve the right to suspend or terminate your access to ConvertX at any time, with or without notice, if we have reasonable grounds to believe you have violated these Terms or engaged in conduct harmful to other users, third parties, or our platform.</p>
+      <p>You may stop using our services at any time. Sections relating to intellectual property, disclaimers, limitation of liability, and governing law shall survive any termination of these Terms.</p>
+    </section>
+
+    <section class="section" id="changes">
+      <div class="section-header">
+        <div class="section-badge">09</div>
+        <h2 class="section-title">Changes to These Terms</h2>
+      </div>
+      <p>We may revise these Terms from time to time to reflect changes in our services, applicable laws, or business practices. When we make material changes, we will:</p>
+      <ul class="item-list">
+        <li>Update the "Last updated" date at the top of this page.</li>
+        <li>Display a notice on our homepage or send an email notification for registered users where reasonably practicable.</li>
+      </ul>
+      <p>Your continued use of ConvertX after changes take effect constitutes your acceptance of the revised Terms.</p>
+    </section>
+
+  
+
+
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">ConvertX</div>
+    <div>© 2025 ConvertX. Currency data via Open Exchange Rates · Frankfurter (ECB) · jsDelivr CDN.</div>
+  </div>
+  <div class="footer-links">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html" class="active">Terms of Use</a>
+    <a href="about.html">About</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+  const sections = document.querySelectorAll('.section');
+  const tocLinks = document.querySelectorAll('.toc a');
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        tocLinks.forEach(l => l.classList.toggle('toc-active', l.getAttribute('href') === '#' + id));
+      }
+    });
+  }, { rootMargin: '-88px 0px -60% 0px', threshold: 0 });
+
+  sections.forEach(s => io.observe(s));
+</script>
+
+</body>
+</html>
