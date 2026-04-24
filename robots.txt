@@ -1,4 +1,72 @@
+# robots.txt for convertersolutions.org
+# Generated for maximum search engine crawlability and AdSense approval
+
+# ──────────────────────────────────────────
+# ALLOW ALL SEARCH ENGINE CRAWLERS
+# ──────────────────────────────────────────
+
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /wp-admin/
+Disallow: /cgi-bin/
+Disallow: /tmp/
+Disallow: /private/
 
-Sitemap: https://convertersolutions.org/sitemap.xml
+# ──────────────────────────────────────────
+# MAJOR SEARCH ENGINES (explicitly allowed)
+# ──────────────────────────────────────────
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-Video
+Allow: /
+
+User-agent: Googlebot-News
+Allow: /
+
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: AdsBot-Google-Mobile
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: YandexBot
+Allow: /
+
+User-agent: Sogou
+Allow: /
+
+User-agent: Exabot
+Allow: /
+
+User-agent: facebot
+Allow: /
+
+User-agent: ia_archiver
+Allow: /
+
+# ──────────────────────────────────────────
+# SITEMAP LOCATION
+# ──────────────────────────────────────────
+
+Sitemap: https://www.convertersolutions.org/sitemap.xml
