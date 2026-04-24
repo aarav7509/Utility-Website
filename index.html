@@ -365,7 +365,6 @@
     transform: rotate(180deg);
   }
 
-  /* ── Result box with copy button ── */
   .result-box {
     background: linear-gradient(135deg, rgba(201,168,76,0.08), rgba(201,168,76,0.02));
     border: 1px solid rgba(201,168,76,0.25);
@@ -389,12 +388,11 @@
     font-weight: 600;
     color: var(--accent2);
     line-height: 1.1;
-    padding-right: 48px; /* leave room for copy btn */
+    padding-right: 48px;
   }
 
   .result-subtext { font-size: 0.8rem; color: var(--muted); margin-top: 6px; }
 
-  /* Copy button */
   .copy-btn {
     position: absolute;
     top: 16px;
@@ -426,7 +424,6 @@
     color: var(--success);
   }
 
-  /* Copy toast */
   .copy-toast {
     position: fixed;
     bottom: 32px;
@@ -687,7 +684,6 @@
     .currency-search-row { grid-template-columns: 1fr; }
   }
 
-  /* ── Honorable Mentions ── */
   .hm-stat-strip {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -754,23 +750,22 @@
   .hm-legend { display: flex; flex-wrap: wrap; gap: 14px; margin-bottom: 20px; }
   .hm-leg-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--muted); }
   .hm-leg-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
-
 </style>
 </head>
 <body>
 
 <!-- Toast notification -->
-<div class="copy-toast" id="copyToast">✓ Copied to clipboard</div>
+<div class="copy-toast" id="copyToast" role="status" aria-live="polite">✓ Copied to clipboard</div>
 
 <header>
-  <div class="logo">
-    <div class="logo-icon">⚡</div>
-    <span id="logoText"></span><span class="logo-cursor blinking" id="logoCursor"></span>
+  <div class="logo" role="banner">
+    <div class="logo-icon" aria-hidden="true">⚡</div>
+    <span id="logoText"></span><span class="logo-cursor blinking" id="logoCursor" aria-hidden="true"></span>
   </div>
   <div class="region-wrapper">
-    <span class="region-label">Region</span>
-    <span class="region-flag" id="regionFlag">🌍</span>
-    <select id="regionSelect" onchange="applyRegion()">
+    <span class="region-label" id="regionLabel">Region</span>
+    <span class="region-flag" id="regionFlag" aria-hidden="true">🌍</span>
+    <select id="regionSelect" onchange="applyRegion()" aria-labelledby="regionLabel">
       <option value="US">🇺🇸 United States</option>
       <option value="GB">🇬🇧 United Kingdom</option>
       <option value="EU">🇪🇺 European Union</option>
@@ -811,115 +806,143 @@
     <p>Real-time currency rates, universal unit conversions, and global time zone tools — all in one place.</p>
   </div>
 
-  <div class="tabs" role="tablist">
-    <button class="tab-btn active" onclick="switchTab('currency')" id="tab-currency">
-      <span class="tab-icon">💱</span> Currency
+  <!-- ✅ FIX 1: Added role="tablist" with aria-label. Each button now has role="tab", aria-selected, and aria-controls -->
+  <div class="tabs" role="tablist" aria-label="Converter type">
+    <button
+      class="tab-btn active"
+      role="tab"
+      id="tab-currency"
+      aria-selected="true"
+      aria-controls="panel-currency"
+      onclick="switchTab('currency')">
+      <span class="tab-icon" aria-hidden="true">💱</span> Currency
     </button>
-    <button class="tab-btn" onclick="switchTab('unit')" id="tab-unit">
-      <span class="tab-icon">📐</span> Units
+    <button
+      class="tab-btn"
+      role="tab"
+      id="tab-unit"
+      aria-selected="false"
+      aria-controls="panel-unit"
+      onclick="switchTab('unit')">
+      <span class="tab-icon" aria-hidden="true">📐</span> Units
     </button>
-    <button class="tab-btn" onclick="switchTab('time')" id="tab-time">
-      <span class="tab-icon">🕰</span> Time
+    <button
+      class="tab-btn"
+      role="tab"
+      id="tab-time"
+      aria-selected="false"
+      aria-controls="panel-time"
+      onclick="switchTab('time')">
+      <span class="tab-icon" aria-hidden="true">🕰</span> Time
     </button>
-    <button class="tab-btn" onclick="switchTab('mentions')" id="tab-mentions">
-      <span class="tab-icon">🏆</span> Honorable Mentions
+    <button
+      class="tab-btn"
+      role="tab"
+      id="tab-mentions"
+      aria-selected="false"
+      aria-controls="panel-mentions"
+      onclick="switchTab('mentions')">
+      <span class="tab-icon" aria-hidden="true">🏆</span> Honorable Mentions
     </button>
   </div>
 
   <div id="converterArea">
 
+    <!-- ✅ FIX 2: Each panel now has role="tabpanel", aria-labelledby linking back to its tab button, and tabindex="0" -->
     <!-- CURRENCY PANEL -->
-    <div class="panel active" id="panel-currency">
+    <div class="panel active" id="panel-currency" role="tabpanel" aria-labelledby="tab-currency" tabindex="0">
       <div class="card">
         <div class="card-header">
           <div class="card-title">
-            <div class="icon-badge">💱</div>
+            <div class="icon-badge" aria-hidden="true">💱</div>
             Currency Converter
             <span class="currency-count-badge" id="currencyCountBadge">— currencies</span>
           </div>
           <div class="card-subtitle" id="rateTimestamp">Fetching live exchange rates…</div>
         </div>
 
-        <div class="notice-bar">
-          <div class="dot"></div>
+        <div class="notice-bar" role="status" aria-live="polite">
+          <div class="dot" aria-hidden="true"></div>
           <span id="rateStatus">Loading rates from multiple sources…</span>
         </div>
 
         <div class="currency-search-row">
           <div>
-            <label style="display:block;font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-weight:500;">Search From Currency</label>
+            <label for="searchFrom" style="display:block;font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-weight:500;">Search From Currency</label>
             <input type="text" class="currency-search-input" id="searchFrom" placeholder="e.g. USD, Euro, dollar…" oninput="filterCurrencies('from')">
           </div>
           <div>
-            <label style="display:block;font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-weight:500;">Search To Currency</label>
+            <label for="searchTo" style="display:block;font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-weight:500;">Search To Currency</label>
             <input type="text" class="currency-search-input" id="searchTo" placeholder="e.g. EUR, Pound, yen…" oninput="filterCurrencies('to')">
           </div>
         </div>
 
         <div class="converter-row">
           <div class="field-group">
-            <label>Amount &amp; From</label>
+            <label for="currAmount">Amount &amp; From</label>
             <div class="field-inner">
-              <select class="currency-select" id="currFrom" onchange="convertCurrency(); syncSearchFromSelect()"></select>
+              <select class="currency-select" id="currFrom" aria-label="From currency" onchange="convertCurrency(); syncSearchFromSelect()"></select>
               <input type="number" id="currAmount" value="100" min="0" step="any" placeholder="0.00" oninput="convertCurrency()">
             </div>
           </div>
-          <button class="swap-btn" onclick="swapCurrency()" title="Swap currencies">⇄</button>
+          <button class="swap-btn" onclick="swapCurrency()" aria-label="Swap currencies">⇄</button>
           <div class="field-group">
-            <label>To Currency</label>
+            <label for="currTo">To Currency</label>
             <div class="field-inner">
-              <select class="currency-select" id="currTo" onchange="convertCurrency(); syncSearchToSelect()"></select>
-              <input type="number" id="currResult" placeholder="—" readonly style="color:var(--accent2)">
+              <select class="currency-select" id="currTo" aria-label="To currency" onchange="convertCurrency(); syncSearchToSelect()"></select>
+              <input type="number" id="currResult" placeholder="—" readonly aria-label="Conversion result" style="color:var(--accent2)">
             </div>
           </div>
         </div>
 
-        <div class="result-box" id="currResultBox" style="display:none">
-          <button class="copy-btn" id="copyCurrBtn" onclick="copyResult('currResultLarge', 'copyCurrBtn')" title="Copy result">⎘</button>
+        <div class="result-box" id="currResultBox" style="display:none" aria-live="polite">
+          <button class="copy-btn" id="copyCurrBtn" onclick="copyResult('currResultLarge', 'copyCurrBtn')" aria-label="Copy conversion result">⎘</button>
           <div class="result-label">Converted Amount</div>
-          <div class="result-value" id="currResultLarge">—</div>
+          <div class="result-value" id="currResultLarge" aria-live="polite">—</div>
           <div class="result-subtext" id="currResultSub">—</div>
         </div>
 
         <button class="convert-btn" onclick="convertCurrency()">Convert Now</button>
 
-        <div class="rate-strip" id="popularRates"></div>
+        <div class="rate-strip" id="popularRates" aria-label="Popular exchange rates"></div>
       </div>
     </div>
 
     <!-- UNIT PANEL -->
-    <div class="panel" id="panel-unit">
+    <!-- ✅ FIX 3: role="tabpanel" with aria-labelledby and tabindex -->
+    <div class="panel" id="panel-unit" role="tabpanel" aria-labelledby="tab-unit" tabindex="0">
       <div class="card">
         <div class="card-header">
           <div class="card-title">
-            <div class="icon-badge">📐</div>
+            <div class="icon-badge" aria-hidden="true">📐</div>
             Unit Converter
           </div>
           <div class="card-subtitle" id="unitSystemLabel">System: Metric (SI)</div>
         </div>
 
-        <div class="unit-categories" id="unitCategories"></div>
+        <!-- ✅ FIX 4: Unit category buttons use role="group" wrapper with aria-label -->
+        <div class="unit-categories" id="unitCategories" role="group" aria-label="Unit categories"></div>
 
         <div class="unit-grid">
           <div class="field-group">
-            <label>Value &amp; From Unit</label>
+            <label for="unitFrom">Value &amp; From Unit</label>
             <div class="field-inner">
-              <input type="number" id="unitFrom" value="1" step="any" oninput="convertUnit()" style="font-size:1.3rem;font-weight:300">
-              <select id="unitFromSel" style="border-left:1px solid var(--border); min-width:110px;" onchange="convertUnit()"></select>
+              <input type="number" id="unitFrom" value="1" step="any" oninput="convertUnit()" aria-label="Value to convert" style="font-size:1.3rem;font-weight:300">
+              <select id="unitFromSel" aria-label="From unit" style="border-left:1px solid var(--border); min-width:110px;" onchange="convertUnit()"></select>
             </div>
           </div>
-          <button class="swap-btn" onclick="swapUnit()" title="Swap units">⇄</button>
+          <button class="swap-btn" onclick="swapUnit()" aria-label="Swap units">⇄</button>
           <div class="field-group">
-            <label>To Unit</label>
+            <label for="unitToSel">To Unit</label>
             <div class="field-inner">
-              <input type="number" id="unitTo" placeholder="—" readonly style="font-size:1.3rem;font-weight:300;color:var(--accent2)">
-              <select id="unitToSel" style="border-left:1px solid var(--border); min-width:110px;" onchange="convertUnit()"></select>
+              <input type="number" id="unitTo" placeholder="—" readonly aria-label="Converted unit result" style="font-size:1.3rem;font-weight:300;color:var(--accent2)">
+              <select id="unitToSel" aria-label="To unit" style="border-left:1px solid var(--border); min-width:110px;" onchange="convertUnit()"></select>
             </div>
           </div>
         </div>
 
-        <div class="result-box" id="unitResultBox" style="display:none">
-          <button class="copy-btn" id="copyUnitBtn" onclick="copyResult('unitResultLarge', 'copyUnitBtn')" title="Copy result">⎘</button>
+        <div class="result-box" id="unitResultBox" style="display:none" aria-live="polite">
+          <button class="copy-btn" id="copyUnitBtn" onclick="copyResult('unitResultLarge', 'copyUnitBtn')" aria-label="Copy unit result">⎘</button>
           <div class="result-label">Result</div>
           <div class="result-value" id="unitResultLarge">—</div>
           <div class="result-subtext" id="unitResultSub">—</div>
@@ -931,11 +954,12 @@
     </div>
 
     <!-- TIME PANEL -->
-    <div class="panel" id="panel-time">
+    <!-- ✅ FIX 5: role="tabpanel" with aria-labelledby and tabindex -->
+    <div class="panel" id="panel-time" role="tabpanel" aria-labelledby="tab-time" tabindex="0">
       <div class="card">
         <div class="card-header">
           <div class="card-title">
-            <div class="icon-badge">🕰</div>
+            <div class="icon-badge" aria-hidden="true">🕰</div>
             Time Zone Converter
           </div>
           <div class="card-subtitle">Convert and compare times across the globe</div>
@@ -943,71 +967,75 @@
 
         <div class="time-converter-row">
           <div class="field-group">
-            <label>Date &amp; Time (From)</label>
+            <label for="timeDate">Date &amp; Time (From)</label>
             <div style="display:flex;gap:8px">
-              <input type="date" id="timeDate" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'Outfit',sans-serif;font-size:0.9rem;padding:12px 14px;outline:none" oninput="convertTime()">
-              <input type="time" id="timeInput" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'Outfit',sans-serif;font-size:0.9rem;padding:12px 14px;outline:none" oninput="convertTime()">
+              <input type="date" id="timeDate" aria-label="Date" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'Outfit',sans-serif;font-size:0.9rem;padding:12px 14px;outline:none" oninput="convertTime()">
+              <input type="time" id="timeInput" aria-label="Time" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'Outfit',sans-serif;font-size:0.9rem;padding:12px 14px;outline:none" oninput="convertTime()">
             </div>
           </div>
-          <div style="width:44px"></div>
+          <div style="width:44px" aria-hidden="true"></div>
           <div></div>
         </div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
           <div class="field-group">
-            <label>From Time Zone</label>
+            <label for="tzFrom">From Time Zone</label>
             <div class="field-inner">
               <select id="tzFrom" style="width:100%;padding:13px 14px;font-size:0.88rem;" onchange="convertTime()"></select>
             </div>
           </div>
           <div class="field-group">
-            <label>To Time Zone</label>
+            <label for="tzTo">To Time Zone</label>
             <div class="field-inner">
               <select id="tzTo" style="width:100%;padding:13px 14px;font-size:0.88rem;" onchange="convertTime()"></select>
             </div>
           </div>
         </div>
 
-        <div class="result-box" id="timeResultBox">
-          <button class="copy-btn" id="copyTimeBtn" onclick="copyTimeResult('copyTimeBtn')" title="Copy result">⎘</button>
+        <div class="result-box" id="timeResultBox" aria-live="polite">
+          <button class="copy-btn" id="copyTimeBtn" onclick="copyTimeResult('copyTimeBtn')" aria-label="Copy time result">⎘</button>
           <div class="result-label">Converted Time</div>
           <div class="result-value" id="timeResult">—</div>
           <div class="result-subtext" id="timeResultSub">—</div>
         </div>
 
-        <h3 style="font-family:'Manrope',serif;font-size:1.2rem;margin-bottom:14px;font-weight:500;">World Clock <span style="font-size:0.75rem;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:400;" id="clockTick"></span></h3>
-        <div class="time-grid" id="worldClock"></div>
+        <h3 style="font-family:'Manrope',serif;font-size:1.2rem;margin-bottom:14px;font-weight:500;">
+          World Clock
+          <span style="font-size:0.75rem;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:400;" id="clockTick" aria-live="off"></span>
+        </h3>
+        <div class="time-grid" id="worldClock" aria-label="World clock" aria-live="off"></div>
       </div>
     </div>
 
     <!-- HONORABLE MENTIONS PANEL -->
-    <div class="panel" id="panel-mentions">
+    <!-- ✅ FIX 6: role="tabpanel" with aria-labelledby and tabindex -->
+    <div class="panel" id="panel-mentions" role="tabpanel" aria-labelledby="tab-mentions" tabindex="0">
       <div class="card">
         <div class="card-header">
           <div class="card-title">
-            <div class="icon-badge">&#x1F3C6;</div>
+            <div class="icon-badge" aria-hidden="true">&#x1F3C6;</div>
             Honorable Mentions
           </div>
           <div class="card-subtitle">The best free utility tools on the web &mdash; ranked by estimated monthly active users</div>
         </div>
 
-        <div class="hm-stat-strip">
-          <div class="hm-stat-card">
+        <div class="hm-stat-strip" role="list" aria-label="Statistics">
+          <div class="hm-stat-card" role="listitem">
             <div class="hm-stat-label">Most-used tool</div>
             <div class="hm-stat-val">Google Translate</div>
             <div class="hm-stat-sub">~500M monthly users</div>
           </div>
-          <div class="hm-stat-card">
+          <div class="hm-stat-card" role="listitem">
             <div class="hm-stat-label">Combined reach</div>
             <div class="hm-stat-val">1.6B+</div>
             <div class="hm-stat-sub">estimated monthly users</div>
           </div>
-          <div class="hm-stat-card">
+          <div class="hm-stat-card" role="listitem">
             <div class="hm-stat-label">Top category</div>
             <div class="hm-stat-val">Text &amp; writing</div>
             <div class="hm-stat-sub">6 of 20 tools</div>
           </div>
-          <div class="hm-stat-card">
+          <div class="hm-stat-card" role="listitem">
             <div class="hm-stat-label">Free tools</div>
             <div class="hm-stat-val">20 / 20</div>
             <div class="hm-stat-sub">all free to use</div>
@@ -1015,7 +1043,7 @@
         </div>
 
         <div class="hm-tbl-wrap">
-          <table class="hm-table">
+          <table class="hm-table" aria-label="Top utility tools ranked by monthly users">
             <colgroup>
               <col style="width:40px">
               <col style="width:148px">
@@ -1025,11 +1053,11 @@
             </colgroup>
             <thead>
               <tr>
-                <th>#</th>
-                <th>Tool</th>
-                <th>Category</th>
-                <th>What it does</th>
-                <th>Est. monthly users</th>
+                <th scope="col">#</th>
+                <th scope="col">Tool</th>
+                <th scope="col">Category</th>
+                <th scope="col">What it does</th>
+                <th scope="col">Est. monthly users</th>
               </tr>
             </thead>
             <tbody id="hmTableBody"></tbody>
@@ -1039,16 +1067,19 @@
         <div class="hm-chart-section">
           <h3 style="font-family:'Manrope',serif;font-size:1.2rem;font-weight:500;margin:0 0 4px;color:var(--text);">Usage comparison</h3>
           <p style="font-size:0.82rem;color:var(--muted);margin:0 0 20px;">Estimated monthly active users across all 20 tools (millions)</p>
-          <div class="hm-legend">
-            <span class="hm-leg-item"><span class="hm-leg-dot" style="background:#378ADD"></span>Developer</span>
-            <span class="hm-leg-item"><span class="hm-leg-dot" style="background:#639922"></span>Text &amp; writing</span>
-            <span class="hm-leg-item"><span class="hm-leg-dot" style="background:#EF9F27"></span>Image &amp; media</span>
-            <span class="hm-leg-item"><span class="hm-leg-dot" style="background:#7F77DD"></span>Data &amp; files</span>
-            <span class="hm-leg-item"><span class="hm-leg-dot" style="background:#1D9E75"></span>Utility</span>
-            <span class="hm-leg-item"><span class="hm-leg-dot" style="background:#E24B4A"></span>Security</span>
+
+          <!-- ✅ FIX 7: hm-legend items use role="list" / role="listitem" so the list role has required children -->
+          <div class="hm-legend" role="list" aria-label="Chart legend">
+            <span class="hm-leg-item" role="listitem"><span class="hm-leg-dot" style="background:#378ADD" aria-hidden="true"></span>Developer</span>
+            <span class="hm-leg-item" role="listitem"><span class="hm-leg-dot" style="background:#639922" aria-hidden="true"></span>Text &amp; writing</span>
+            <span class="hm-leg-item" role="listitem"><span class="hm-leg-dot" style="background:#EF9F27" aria-hidden="true"></span>Image &amp; media</span>
+            <span class="hm-leg-item" role="listitem"><span class="hm-leg-dot" style="background:#7F77DD" aria-hidden="true"></span>Data &amp; files</span>
+            <span class="hm-leg-item" role="listitem"><span class="hm-leg-dot" style="background:#1D9E75" aria-hidden="true"></span>Utility</span>
+            <span class="hm-leg-item" role="listitem"><span class="hm-leg-dot" style="background:#E24B4A" aria-hidden="true"></span>Security</span>
           </div>
+
           <div style="position:relative;width:100%;height:580px;">
-            <canvas id="hmChart" role="img" aria-label="Horizontal bar chart of monthly users for 20 online tools. Google Translate leads at 500M.">Monthly users from 500M down to 5M.</canvas>
+            <canvas id="hmChart" role="img" aria-label="Horizontal bar chart of monthly users for 20 online tools. Google Translate leads at 500M."></canvas>
           </div>
         </div>
 
@@ -1063,11 +1094,11 @@
     <div style="font-family:'Manrope',serif;font-size:1.1rem;font-weight:600;margin-bottom:4px;">ConvertX</div>
     <div>© 2025 ConvertX. Currency data via jsDelivr CDN · Frankfurter (ECB) · Open Exchange Rates.</div>
   </div>
-  <div class="footer-links">
+  <nav class="footer-links" aria-label="Footer navigation">
     <a href="privacy-policy.html">Privacy Policy</a>
     <a href="terms-of-use.html">Terms of Use</a>
     <a href="about.html">About</a>
-  </div>
+  </nav>
 </footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
@@ -1099,7 +1130,6 @@ function copyResult(resultId, btnId) {
       btn.classList.remove('copied');
     }, 2000);
   }).catch(() => {
-    // Fallback for browsers that block clipboard
     const ta = document.createElement('textarea');
     ta.value = el.textContent.trim();
     document.body.appendChild(ta);
@@ -1191,13 +1221,18 @@ function applyRegion() {
 }
 
 // ══════════════════════════════════════════
-//  TAB SWITCHING
+//  TAB SWITCHING — ✅ FIX 8: Updates aria-selected on all tabs
 // ══════════════════════════════════════════
 function switchTab(name) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-selected', 'false');
+  });
   document.getElementById('panel-' + name).classList.add('active');
-  document.getElementById('tab-' + name).classList.add('active');
+  const activeBtn = document.getElementById('tab-' + name);
+  activeBtn.classList.add('active');
+  activeBtn.setAttribute('aria-selected', 'true');
   if (name === 'time') updateWorldClock();
 }
 
@@ -1691,8 +1726,9 @@ let currentCategory = 'Length';
 
 function buildCategoryTabs() {
   const el = document.getElementById('unitCategories');
+  // ✅ FIX 9: Category buttons inside role="group" get aria-pressed to indicate current selection
   el.innerHTML = Object.entries(UNIT_DATA).map(([name,d]) =>
-    `<button class="cat-btn ${name===currentCategory?'active':''}" onclick="selectCategory('${name}')">${d.icon} ${name}</button>`
+    `<button class="cat-btn ${name===currentCategory?'active':''}" aria-pressed="${name===currentCategory}" onclick="selectCategory('${name}')">${d.icon} ${name}</button>`
   ).join('');
 }
 
@@ -1913,10 +1949,10 @@ function updateWorldClock() {
     const diffH      = Math.round((offsetDate - utcDate) / 3600000);
     const offsetStr  = diffH === 0 ? 'UTC' : (diffH > 0 ? `UTC+${diffH}` : `UTC${diffH}`);
     return `<div class="tz-card">
-      <div class="tz-offset">${offsetStr}</div>
+      <div class="tz-offset" aria-hidden="true">${offsetStr}</div>
       <div class="tz-city">${city}</div>
-      <div class="tz-time">${time}</div>
-      <div class="tz-date">${date}</div>
+      <div class="tz-time" aria-label="${city} time: ${time}">${time}</div>
+      <div class="tz-date">${date} <span class="sr-only">(${offsetStr})</span></div>
     </div>`;
   }).join('');
   document.getElementById('clockTick').textContent =
@@ -2034,12 +2070,12 @@ function buildHMTable() {
     const label = t.users >= 1000 ? (t.users/1000).toFixed(1)+'B' : t.users+'M';
     return `<tr>
       <td class="hm-rank">${t.rank}</td>
-      <td><a class="hm-tool-link" href="${t.url}" target="_blank" rel="noopener">${t.name}</a></td>
+      <td><a class="hm-tool-link" href="${t.url}" target="_blank" rel="noopener noreferrer">${t.name}</a></td>
       <td><span class="hm-cat-badge ${t.catClass}">${t.cat}</span></td>
       <td class="hm-desc">${t.desc}</td>
       <td>
         <div class="hm-users-wrap">
-          <div class="hm-users-bar" style="width:${barW}px;background:${t.catColor};"></div>
+          <div class="hm-users-bar" style="width:${barW}px;background:${t.catColor};" role="presentation" aria-hidden="true"></div>
           <span class="hm-users-val">~${label}</span>
         </div>
       </td>
@@ -2095,7 +2131,6 @@ function buildHMChart() {
   });
 }
 
-// Extend switchTab to init chart lazily on first visit
 const _origSwitchTab = switchTab;
 let hmChartBuilt = false;
 switchTab = function(name) {
