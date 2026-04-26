@@ -32,8 +32,6 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-ul, ol { list-style: none; padding: 0; margin: 0; }
-
 
 /* ─────────────────────────────────────────
    2. BASE / SHARED
@@ -1042,18 +1040,18 @@ main {
 .item-list li {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
+  gap: 12px;
   font-size: 0.88rem;
   color: var(--muted);
   line-height: 1.75;
-  list-style: none;
 }
 
 .item-list li::before {
-  content: '→';
-  color: var(--accent);
-  font-size: 0.8rem;
-  margin-top: 2px;
+  content: '';
+  width: 5px; height: 5px;
+  background: var(--accent);
+  border-radius: 50%;
+  margin-top: 9px;
   flex-shrink: 0;
 }
 
@@ -1263,7 +1261,6 @@ main {
   padding: 6px 0 6px 20px;
   position: relative;
   border-bottom: 1px solid rgba(255,255,255,0.04);
-  list-style: none;
 }
 
 .content ul li:last-child, .content ol li:last-child { border-bottom: none; }
