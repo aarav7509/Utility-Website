@@ -475,6 +475,7 @@ function buildPopularRates() {
   }).join('');
 }
 
+
 // ══════════════════════════════════════════
 //  UNIT CONVERTER
 // ══════════════════════════════════════════
@@ -860,6 +861,118 @@ function updateWorldClock() {
   if (tickEl) tickEl.textContent =
     `· ${now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'})} local`;
 }
+
+// Currency Dashboard //
+
+document.addEventListener("DOMContentLoaded", () => {
+
+  const CURRENCY_LIST = [
+    ["USD", "US Dollar", "$"],
+    ["AUD", "Australian Dollar", "A$"],
+    ["EUR", "Euro", "€"],
+    ["JPY", "Japanese Yen", "¥"],
+    ["GBP", "British Pound", "£"],
+    ["INR", "Indian Rupee", "₹"],
+  ];
+
+  let rates = {};
+  let chart = null;
+
+  const baseSelect = document.getElementById("base");
+  const amountInput = document.getElementById("amount");
+  const tableBody = document.getElementById("tableBody");
+
+  // 🚨 HARD SAFETY CHECK (prevents blank page crash)
+  if (!baseSelect || !amountInput || !tableBody) {
+    console.error("Missing required DOM elements:", {
+      baseSelect,
+      amountInput,
+      tableBody
+    });
+    return;
+  }
+
+  // Populate dropdown safely
+  CURRENCY_LIST.forEach(([code]) => {
+    const option = document.createElement("option");
+    option.value = code;
+    option.textContent = code;
+    baseSelect.appendChild(option);
+  });
+
+  baseSelect.value = "USD";
+
+  async function fetchRates() {
+    try {
+      const base = baseSelect.value;
+
+      const res = await fetch(`https://api.exchangerate-api.com/v4/latest/${base}`);
+      const data = await res.json();
+
+      rates = data.rates || {};
+      updateUI();
+
+    } catch (err) {
+      console.error("Fetch failed:", err);
+    }
+  }
+
+  function updateUI() {
+    const amount = Number(amountInput.value) || 0;
+
+    tableBody.innerHTML = "";
+
+    const labels = [];
+    const values = [];
+
+    CURRENCY_LIST.forEach(([code, name, symbol]) => {
+      const rate = rates[code] || 0;
+      const converted = rate * amount;
+
+      tableBody.innerHTML += `
+        <tr>
+          <td>${code} - ${name}</td>
+          <td>${symbol} ${converted.toFixed(2)}</td>
+        </tr>
+      `;
+
+      labels.push(code);
+      values.push(converted);
+    });
+
+    if (typeof Chart === "undefined") {
+      console.warn("Chart.js not loaded");
+      return;
+    }
+
+    const ctx = document.getElementById("chart");
+    if (!ctx) return;
+
+    if (!chart) {
+      chart = new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [{
+            label: "Converted Values",
+            data: values
+          }]
+        }
+      });
+    } else {
+      chart.data.labels = labels;
+      chart.data.datasets[0].data = values;
+      chart.update();
+    }
+  }
+
+  baseSelect.addEventListener("change", fetchRates);
+  amountInput.addEventListener("input", updateUI);
+
+  fetchRates();
+});
+
+
 
 // ══════════════════════════════════════════
 //  INIT

@@ -121,6 +121,102 @@
       <div class="rate-strip" id="popularRates" aria-label="Popular exchange rates"></div>
     </div>
   </div>
+  <style>
+    /* ---------- CONTAINER ---------- */
+
+
+    /* ---------- INPUT ROW ---------- */
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    /* ---------- CHART ---------- */
+    canvas {
+      width: 100% !important;
+      height: auto !important;
+    }
+
+  .hm-tbl-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    margin-bottom: 32px;
+  }
+  .hm-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; table-layout: fixed; }
+  .hm-table thead th {
+    background: var(--surface2);
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  .hm-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
+  .hm-table tbody tr:last-child { border-bottom: none; }
+  .hm-table tbody tr:hover { background: var(--surface2); }
+  .hm-table tbody td { padding: 11px 14px; vertical-align: middle; color: var(--text); }
+  .hm-rank { font-weight: 600; color: var(--muted); font-size: 0.78rem; }
+  .hm-tool-link { color: var(--accent2); text-decoration: none; font-weight: 600; }
+  .hm-tool-link:hover { text-decoration: underline; }
+  .hm-desc { color: var(--muted); line-height: 1.5; }
+  .hm-cat-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+    letter-spacing: 0.03em;
+  }
+
+
+
+    /* ---------- TABLE ---------- */
+    .row { display: flex; gap: 10px; align-items: center; } table { width: 100%; border-collapse: collapse; } td, th { padding: 10px; border-bottom: 1px solid #ddd; }
+
+  </style>
+
+<div class="tool-content">
+<!-- Controls -->
+<div class="card">
+  <h1 class="card-title">
+    <div class="icon-badge" aria-hidden="true">
+    📊</div> Currency Dashboard  <span class="currency-count-badge" id="currencyCountBadge">6 currencies</span>
+  </h1>
+    <div class="row">
+    <div>
+      <label style="display:block;font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:-12px;font-weight:500;">Base Currency</label><br />
+      <select class="currency-select" id="base"></select>
+    </div>
+
+    <div>
+      <label style="display:block;font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:-18px;font-weight:500;">Amount</label><br />
+      <input class="currency-search-input" type="number" id="amount" value="1" min="0" step="0.1" />
+    </div>
+  </div>
+  <canvas id="chart"></canvas>
+  <h3 class="card-title">Converted Values</h3>
+
+  <div class="hm-tbl-wrap">
+  <table class="hm-table">
+    <thead>
+      <tr >
+        <th>Currency</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
+</div>
+</div>
 </main>
 
 <footer>
@@ -134,7 +230,7 @@
     <a href="about.html">About</a>
   </nav>
 </footer>
-
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
