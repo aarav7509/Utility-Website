@@ -5,10 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Convertersolutions — Universal Currency, Unit & Time Converter</title>
 <meta name="description" content="Convertersolutions is the world's most comprehensive converter tool. Convert currencies, units of measurement, and time zones instantly — tailored to your region.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
-
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -21,353 +18,656 @@
     "width": 512,
     "height": 512
   },
-  "sameAs": [
-    "https://www.convertersolutions.org"
-  ],
+  "sameAs": ["https://www.convertersolutions.org"],
   "description": "Convertersolutions is the world's most comprehensive converter tool. Convert currencies, units of measurement, and time zones instantly — tailored to your region."
 }
 </script>
+<style>
+/* ── HOME PAGE SPECIFIC ── */
+.home-hero {
+  text-align: center;
+  padding: 80px 24px 64px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.home-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(201,168,76,0.08);
+  border: 1px solid rgba(201,168,76,0.2);
+  border-radius: 40px;
+  padding: 5px 14px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+
+.home-eyebrow::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 50%;
+}
+
+.home-hero h1 {
+  font-family: 'Manrope', serif;
+  font-size: clamp(2.8rem, 6vw, 4.8rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -1.5px;
+  margin-bottom: 20px;
+  color: var(--text);
+}
+
+.home-hero h1 em {
+  font-style: italic;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.home-hero p {
+  color: var(--muted);
+  font-size: 1.1rem;
+  max-width: 520px;
+  margin: 0 auto 36px;
+  line-height: 1.7;
+}
+
+.hero-cta-row {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), #b8932a);
+  color: #0c0c10;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  padding: 13px 28px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,168,76,0.35); }
+
+.btn-secondary {
+  background: var(--surface2);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 13px 28px;
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-secondary:hover { border-color: var(--accent); color: var(--accent2); }
+
+/* Tool cards grid */
+.tools-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.section-heading .label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.section-heading h2 {
+  font-family: 'Manrope', serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.section-heading p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  max-width: 480px;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 80px;
+}
+
+.tool-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 28px;
+  text-decoration: none;
+  color: var(--text);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.25s, transform 0.25s;
+  display: block;
+}
+
+.tool-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity 0.25s;
+}
+
+.tool-card:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+.tool-card:hover::before { opacity: 1; }
+
+.tool-card-icon {
+  width: 52px; height: 52px;
+  background: linear-gradient(135deg, rgba(201,168,76,0.18), rgba(201,168,76,0.04));
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.tool-card h3 {
+  font-family: 'Manrope', serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.tool-card p {
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.tool-card-features {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.tool-card-features span {
+  font-size: 0.8rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-card-features span::before { content: '→'; color: var(--accent); font-size: 0.75rem; }
+
+.tool-card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent2);
+}
+
+/* Stats strip */
+.stats-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 80px;
+}
+
+.stat-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 20px;
+  text-align: center;
+}
+
+.stat-num {
+  font-family: 'Manrope', serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.stat-lbl { font-size: 0.82rem; color: var(--muted); line-height: 1.4; }
+
+/* Who is it for section */
+.audience-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+.audience-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.audience-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 24px;
+  transition: border-color 0.2s;
+}
+
+.audience-card:hover { border-color: rgba(201,168,76,0.3); }
+
+.audience-icon { font-size: 2rem; margin-bottom: 12px; display: block; }
+
+.audience-card h4 {
+  font-family: 'Manrope', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.audience-card p { font-size: 0.84rem; color: var(--muted); line-height: 1.65; }
+
+/* Why us section */
+.why-section {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.why-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 22px;
+  transition: border-color 0.2s;
+}
+
+.why-item:hover { border-color: rgba(201,168,76,0.3); }
+
+.why-num {
+  font-family: 'Manrope', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: rgba(201,168,76,0.25);
+  line-height: 1;
+  min-width: 32px;
+  flex-shrink: 0;
+}
+
+.why-item h4 { font-family: 'Manrope', serif; font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+.why-item p  { font-size: 0.84rem; color: var(--muted); line-height: 1.65; }
+
+/* Bottom CTA */
+.home-cta {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px 96px;
+}
+
+.home-cta-inner {
+  background: linear-gradient(135deg, rgba(201,168,76,0.1), rgba(201,168,76,0.03));
+  border: 1px solid rgba(201,168,76,0.25);
+  border-radius: var(--radius);
+  padding: 56px 40px;
+  text-align: center;
+}
+
+.home-cta-inner h2 {
+  font-family: 'Manrope', serif;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.home-cta-inner p { color: var(--muted); font-size: 0.95rem; margin-bottom: 28px; }
+
+/* Nav links */
+.nav-links {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 7px 14px;
+  border-radius: 20px;
+  transition: all 0.2s;
+}
+
+.nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.nav-links a.active { color: var(--accent2); }
+
+/* Divider */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  max-width: 1100px;
+  margin: 0 auto 80px;
+}
+
+@media (max-width: 600px) {
+  .home-hero { padding: 56px 24px 48px; }
+  .hero-cta-row { flex-direction: column; align-items: center; }
+  .btn-primary, .btn-secondary { width: 100%; justify-content: center; }
+  .nav-links { display: none; }
+  .home-cta-inner { padding: 36px 24px; }
+}
+</style>
 </head>
 <body>
 
-<!-- Toast notification -->
-<div class="copy-toast" id="copyToast" role="status" aria-live="polite">✓ Copied to clipboard</div>
-
 <header>
-  <div class="logo" role="banner">
+  <a href="index.html" class="logo">
     <div class="logo-icon" aria-hidden="true"><img src="preview.png" alt="" width="22" height="22"></div>
-    <span id="logoText"></span><span class="logo-cursor blinking" id="logoCursor" aria-hidden="true"></span>
-  </div>
+    <span>Converter<span>solutions</span></span>
+  </a>
+  <nav class="nav-links" aria-label="Main navigation">
+    <a href="currency.html">💱 Currency</a>
+    <a href="units.html">📐 Units</a>
+    <a href="time.html">🕰 Time</a>
+    <a href="about.html">About</a>
+  </nav>
   <div class="region-wrapper">
-    <span class="region-label" id="regionLabel">Region</span>
-    <span class="region-flag" id="regionFlag" aria-hidden="true">🌍</span>
-    <select id="regionSelect" onchange="applyRegion()" aria-labelledby="regionLabel">
-      <option value="US">🇺🇸 United States</option>
-      <option value="GB">🇬🇧 United Kingdom</option>
-      <option value="EU">🇪🇺 European Union</option>
-      <option value="CA">🇨🇦 Canada</option>
-      <option value="AU">🇦🇺 Australia</option>
-      <option value="IN">🇮🇳 India</option>
-      <option value="JP">🇯🇵 Japan</option>
-      <option value="CN">🇨🇳 China</option>
-      <option value="BR">🇧🇷 Brazil</option>
-      <option value="MX">🇲🇽 Mexico</option>
-      <option value="AE">🇦🇪 UAE</option>
-      <option value="SG">🇸🇬 Singapore</option>
-      <option value="ZA">🇿🇦 South Africa</option>
-      <option value="KR">🇰🇷 South Korea</option>
-      <option value="NG">🇳🇬 Nigeria</option>
-      <option value="PK">🇵🇰 Pakistan</option>
-      <option value="BD">🇧🇩 Bangladesh</option>
-      <option value="TR">🇹🇷 Turkey</option>
-      <option value="ID">🇮🇩 Indonesia</option>
-      <option value="SA">🇸🇦 Saudi Arabia</option>
-      <option value="AR">🇦🇷 Argentina</option>
-      <option value="EG">🇪🇬 Egypt</option>
-      <option value="TH">🇹🇭 Thailand</option>
-      <option value="MY">🇲🇾 Malaysia</option>
-      <option value="PH">🇵🇭 Philippines</option>
-      <option value="KE">🇰🇪 Kenya</option>
-      <option value="GH">🇬🇭 Ghana</option>
-      <option value="MA">🇲🇦 Morocco</option>
-      <option value="PE">🇵🇪 Peru</option>
-      <option value="VN">🇻🇳 Vietnam</option>
+    <span class="region-flag" aria-hidden="true">🌍</span>
+    <select id="regionSelect" aria-label="Select region">
+      <option value="US">🇺🇸 US</option>
+      <option value="GB">🇬🇧 UK</option>
+      <option value="EU">🇪🇺 EU</option>
+      <option value="AU">🇦🇺 AU</option>
+      <option value="IN">🇮🇳 IN</option>
+      <option value="JP">🇯🇵 JP</option>
     </select>
   </div>
 </header>
 
 <main>
-  <div class="hero">
+
+  <!-- HERO -->
+  <div class="home-hero">
+    <div class="home-eyebrow">Free · Real-time · No sign-up required</div>
     <h1>Convert <em>anything,</em><br>for anyone, anywhere.</h1>
-    <p>Real-time currency rates, universal unit conversions, and global time zone tools — all in one place.</p>
+    <p>Real-time currency rates, universal unit conversions, and global time zone tools — all in one place, tailored to your region.</p>
+    <div class="hero-cta-row">
+      <a href="currency.html" class="btn-primary">💱 Convert Currency</a>
+      <a href="units.html" class="btn-secondary">📐 Convert Units</a>
+      <a href="time.html" class="btn-secondary">🕰 Convert Time</a>
+    </div>
   </div>
 
-  <!-- ✅ FIX 1: Added role="tablist" with aria-label. Each button now has role="tab", aria-selected, and aria-controls -->
-  <div class="tabs" role="tablist" aria-label="Converter type">
-    <button
-      class="tab-btn active"
-      role="tab"
-      id="tab-currency"
-      aria-selected="true"
-      aria-controls="panel-currency"
-      onclick="switchTab('currency')">
-      <span class="tab-icon" aria-hidden="true">💱</span> Currency
-    </button>
-    <button
-      class="tab-btn"
-      role="tab"
-      id="tab-unit"
-      aria-selected="false"
-      aria-controls="panel-unit"
-      onclick="switchTab('unit')">
-      <span class="tab-icon" aria-hidden="true">📐</span> Units
-    </button>
-    <button
-      class="tab-btn"
-      role="tab"
-      id="tab-time"
-      aria-selected="false"
-      aria-controls="panel-time"
-      onclick="switchTab('time')">
-      <span class="tab-icon" aria-hidden="true">🕰</span> Time
-    </button>
-    <button
-      class="tab-btn"
-      role="tab"
-      id="tab-mentions"
-      aria-selected="false"
-      aria-controls="panel-mentions"
-      onclick="switchTab('mentions')">
-      <span class="tab-icon" aria-hidden="true">🏆</span> Honorable Mentions
-    </button>
+  <!-- STATS -->
+  <div class="tools-section">
+    <div class="stats-strip">
+      <div class="stat-item">
+        <div class="stat-num">160+</div>
+        <div class="stat-lbl">Currencies supported</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">9</div>
+        <div class="stat-lbl">Unit categories</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">65+</div>
+        <div class="stat-lbl">Time zones covered</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">30+</div>
+        <div class="stat-lbl">Regions supported</div>
+      </div>
+    </div>
   </div>
 
-  <div id="converterArea">
+  <div class="section-divider"></div>
 
-    <!-- ✅ FIX 2: Each panel now has role="tabpanel", aria-labelledby linking back to its tab button, and tabindex="0" -->
-    <!-- CURRENCY PANEL -->
-    <div class="panel active" id="panel-currency" role="tabpanel" aria-labelledby="tab-currency" tabindex="0">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <div class="icon-badge" aria-hidden="true">💱</div>
-            Currency Converter
-            <span class="currency-count-badge" id="currencyCountBadge">— currencies</span>
-          </div>
-          <div class="card-subtitle" id="rateTimestamp">Fetching live exchange rates…</div>
-        </div>
-
-        <div class="notice-bar" role="status" aria-live="polite">
-          <div class="dot" aria-hidden="true"></div>
-          <span id="rateStatus">Loading rates from multiple sources…</span>
-        </div>
-
-        <div class="currency-search-row">
-          <div>
-            <label for="searchFrom" style="display:block;font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-weight:500;">Search From Currency</label>
-            <input type="text" class="currency-search-input" id="searchFrom" placeholder="e.g. USD, Euro, dollar…" oninput="filterCurrencies('from')">
-          </div>
-          <div>
-            <label for="searchTo" style="display:block;font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-weight:500;">Search To Currency</label>
-            <input type="text" class="currency-search-input" id="searchTo" placeholder="e.g. EUR, Pound, yen…" oninput="filterCurrencies('to')">
-          </div>
-        </div>
-
-        <div class="converter-row">
-          <div class="field-group">
-            <label for="currAmount">Amount &amp; From</label>
-            <div class="field-inner">
-              <select class="currency-select" id="currFrom" aria-label="From currency" onchange="convertCurrency(); syncSearchFromSelect()"></select>
-              <input type="number" id="currAmount" value="100" min="0" step="any" placeholder="0.00" oninput="convertCurrency()">
-            </div>
-          </div>
-          <button class="swap-btn" onclick="swapCurrency()" aria-label="Swap currencies">⇄</button>
-          <div class="field-group">
-            <label for="currTo">To Currency</label>
-            <div class="field-inner">
-              <select class="currency-select" id="currTo" aria-label="To currency" onchange="convertCurrency(); syncSearchToSelect()"></select>
-              <input type="number" id="currResult" placeholder="—" readonly aria-label="Conversion result" style="color:var(--accent2)">
-            </div>
-          </div>
-        </div>
-
-        <div class="result-box" id="currResultBox" style="display:none" aria-live="polite">
-          <button class="copy-btn" id="copyCurrBtn" onclick="copyResult('currResultLarge', 'copyCurrBtn')" aria-label="Copy conversion result">⎘</button>
-          <div class="result-label">Converted Amount</div>
-          <div class="result-value" id="currResultLarge" aria-live="polite">—</div>
-          <div class="result-subtext" id="currResultSub">—</div>
-        </div>
-
-        <button class="convert-btn" onclick="convertCurrency()">Convert Now</button>
-
-        <div class="rate-strip" id="popularRates" aria-label="Popular exchange rates"></div>
-      </div>
+  <!-- LIVE WORLD CLOCK -->
+  <div class="tools-section">
+    <div class="section-heading">
+      <div class="label">Live World Clock</div>
+      <h2>What time is it right now?</h2>
+      <p>Live times across 12 major cities, updating every second.</p>
     </div>
-
-    <!-- UNIT PANEL -->
-    <!-- ✅ FIX 3: role="tabpanel" with aria-labelledby and tabindex -->
-    <div class="panel" id="panel-unit" role="tabpanel" aria-labelledby="tab-unit" tabindex="0">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <div class="icon-badge" aria-hidden="true">📐</div>
-            Unit Converter
-          </div>
-          <div class="card-subtitle" id="unitSystemLabel">System: Metric (SI)</div>
-        </div>
-
-        <!-- ✅ FIX 4: Unit category buttons use role="group" wrapper with aria-label -->
-        <div class="unit-categories" id="unitCategories" role="group" aria-label="Unit categories"></div>
-
-        <div class="unit-grid">
-          <div class="field-group">
-            <label for="unitFrom">Value &amp; From Unit</label>
-            <div class="field-inner">
-              <input type="number" id="unitFrom" value="1" step="any" oninput="convertUnit()" aria-label="Value to convert" style="font-size:1.3rem;font-weight:300">
-              <select id="unitFromSel" aria-label="From unit" style="border-left:1px solid var(--border); min-width:110px;" onchange="convertUnit()"></select>
-            </div>
-          </div>
-          <button class="swap-btn" onclick="swapUnit()" aria-label="Swap units">⇄</button>
-          <div class="field-group">
-            <label for="unitToSel">To Unit</label>
-            <div class="field-inner">
-              <input type="number" id="unitTo" placeholder="—" readonly aria-label="Converted unit result" style="font-size:1.3rem;font-weight:300;color:var(--accent2)">
-              <select id="unitToSel" aria-label="To unit" style="border-left:1px solid var(--border); min-width:110px;" onchange="convertUnit()"></select>
-            </div>
-          </div>
-        </div>
-
-        <div class="result-box" id="unitResultBox" style="display:none" aria-live="polite">
-          <button class="copy-btn" id="copyUnitBtn" onclick="copyResult('unitResultLarge', 'copyUnitBtn')" aria-label="Copy unit result">⎘</button>
-          <div class="result-label">Result</div>
-          <div class="result-value" id="unitResultLarge">—</div>
-          <div class="result-subtext" id="unitResultSub">—</div>
-        </div>
-
-        <h3 style="font-family:'Manrope',serif; font-size:1.1rem; margin-bottom:12px; color:var(--muted); font-weight:500;">Quick Reference</h3>
-        <div class="quick-refs" id="quickRefs"></div>
-      </div>
-    </div>
-
-    <!-- TIME PANEL -->
-    <!-- ✅ FIX 5: role="tabpanel" with aria-labelledby and tabindex -->
-    <div class="panel" id="panel-time" role="tabpanel" aria-labelledby="tab-time" tabindex="0">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <div class="icon-badge" aria-hidden="true">🕰</div>
-            Time Zone Converter
-          </div>
-          <div class="card-subtitle">Convert and compare times across the globe</div>
-        </div>
-
-        <div class="time-converter-row">
-          <div class="field-group">
-            <label for="timeDate">Date &amp; Time (From)</label>
-            <div style="display:flex;gap:8px">
-              <input type="date" id="timeDate" aria-label="Date" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'Outfit',sans-serif;font-size:0.9rem;padding:12px 14px;outline:none" oninput="convertTime()">
-              <input type="time" id="timeInput" aria-label="Time" style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-family:'Outfit',sans-serif;font-size:0.9rem;padding:12px 14px;outline:none" oninput="convertTime()">
-            </div>
-          </div>
-          <div style="width:44px" aria-hidden="true"></div>
-          <div></div>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;">
-          <div class="field-group">
-            <label for="tzFrom">From Time Zone</label>
-            <div class="field-inner">
-              <select id="tzFrom" style="width:100%;padding:13px 14px;font-size:0.88rem;" onchange="convertTime()"></select>
-            </div>
-          </div>
-          <div class="field-group">
-            <label for="tzTo">To Time Zone</label>
-            <div class="field-inner">
-              <select id="tzTo" style="width:100%;padding:13px 14px;font-size:0.88rem;" onchange="convertTime()"></select>
-            </div>
-          </div>
-        </div>
-
-        <div class="result-box" id="timeResultBox" aria-live="polite">
-          <button class="copy-btn" id="copyTimeBtn" onclick="copyTimeResult('copyTimeBtn')" aria-label="Copy time result">⎘</button>
-          <div class="result-label">Converted Time</div>
-          <div class="result-value" id="timeResult">—</div>
-          <div class="result-subtext" id="timeResultSub">—</div>
-        </div>
-
-        <h3 style="font-family:'Manrope',serif;font-size:1.2rem;margin-bottom:14px;font-weight:500;">
-          World Clock
-          <span style="font-size:0.75rem;color:var(--muted);font-family:'Outfit',sans-serif;font-weight:400;" id="clockTick" aria-live="off"></span>
-        </h3>
-        <div class="time-grid" id="worldClock" aria-label="World clock" aria-live="off"></div>
-      </div>
-    </div>
-
-    <!-- HONORABLE MENTIONS PANEL -->
-    <!-- ✅ FIX 6: role="tabpanel" with aria-labelledby and tabindex -->
-    <div class="panel" id="panel-mentions" role="tabpanel" aria-labelledby="tab-mentions" tabindex="0">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">
-            <div class="icon-badge" aria-hidden="true">&#x1F3C6;</div>
-            Honorable Mentions
-          </div>
-          <div class="card-subtitle">The best free utility tools on the web &mdash; ranked by estimated monthly active users</div>
-        </div>
-
-        <div class="hm-stat-strip" role="list" aria-label="Statistics">
-          <div class="hm-stat-card" role="listitem">
-            <div class="hm-stat-label">Most-used tool</div>
-            <div class="hm-stat-val">Google Translate</div>
-            <div class="hm-stat-sub">~500M monthly users</div>
-          </div>
-          <div class="hm-stat-card" role="listitem">
-            <div class="hm-stat-label">Combined reach</div>
-            <div class="hm-stat-val">1.6B+</div>
-            <div class="hm-stat-sub">estimated monthly users</div>
-          </div>
-          <div class="hm-stat-card" role="listitem">
-            <div class="hm-stat-label">Top category</div>
-            <div class="hm-stat-val">Text &amp; writing</div>
-            <div class="hm-stat-sub">6 of 20 tools</div>
-          </div>
-          <div class="hm-stat-card" role="listitem">
-            <div class="hm-stat-label">Free tools</div>
-            <div class="hm-stat-val">20 / 20</div>
-            <div class="hm-stat-sub">all free to use</div>
-          </div>
-        </div>
-
-        <div class="hm-tbl-wrap">
-          <table class="hm-table" aria-label="Top utility tools ranked by monthly users">
-            <colgroup>
-              <col style="width:40px">
-              <col style="width:148px">
-              <col style="width:112px">
-              <col>
-              <col style="width:180px">
-            </colgroup>
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Tool</th>
-                <th scope="col">Category</th>
-                <th scope="col">What it does</th>
-                <th scope="col">Est. monthly users</th>
-              </tr>
-            </thead>
-            <tbody id="hmTableBody"></tbody>
-          </table>
-        </div>
-
-        <div class="hm-chart-section">
-          <h3 style="font-family:'Manrope',serif;font-size:1.2rem;font-weight:500;margin:0 0 4px;color:var(--text);">Usage comparison</h3>
-          <p style="font-size:0.82rem;color:var(--muted);margin:0 0 20px;">Estimated monthly active users across all 20 tools (millions)</p>
-
-          <!-- ✅ FIX 7: hm-legend items use role="list" / role="listitem" so the list role has required children -->
-          <div class="hm-legend" role="list" aria-label="Chart legend">
-            <span class="hm-leg-item" role="listitem"><span class="hm-leg-dot" style="background:#378ADD" aria-hidden="true"></span>Developer</span>
-            <span class="hm-leg-item" role="listitem"><span class="hm-leg-dot" style="background:#639922" aria-hidden="true"></span>Text &amp; writing</span>
-            <span class="hm-leg-item" role="listitem"><span class="hm-leg-dot" style="background:#EF9F27" aria-hidden="true"></span>Image &amp; media</span>
-            <span class="hm-leg-item" role="listitem"><span class="hm-leg-dot" style="background:#7F77DD" aria-hidden="true"></span>Data &amp; files</span>
-            <span class="hm-leg-item" role="listitem"><span class="hm-leg-dot" style="background:#1D9E75" aria-hidden="true"></span>Utility</span>
-            <span class="hm-leg-item" role="listitem"><span class="hm-leg-dot" style="background:#E24B4A" aria-hidden="true"></span>Security</span>
-          </div>
-
-          <div style="position:relative;width:100%;height:580px;">
-            <canvas id="hmChart" role="img" aria-label="Horizontal bar chart of monthly users for 20 online tools. Google Translate leads at 500M."></canvas>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
+    <div class="time-grid" id="worldClock" aria-label="Live world clock" aria-live="off"></div>
+    <p style="text-align:center;font-size:0.8rem;color:var(--muted);margin-top:20px;">
+      <span id="clockTick" aria-live="off"></span>
+      &ensp;·&ensp;
+      <a href="time.html" style="color:var(--accent2);text-decoration:none;font-weight:500;">Open Time Zone Converter →</a>
+    </p>
   </div>
+
+  <div class="section-divider"></div>
+
+  <!-- TOOLS -->
+  <div class="tools-section">
+      <h2>Everything you need to convert</h2>
+      <p>Three powerful tools, each built to be fast, accurate, and easy to use on any device.</p>
+    </div>
+
+    <div class="tools-grid">
+      <a href="currency.html" class="tool-card">
+        <div class="tool-card-icon">💱</div>
+        <h3>Currency Converter</h3>
+        <p>Live mid-market exchange rates for 160+ currencies, updated in real time from multiple sources including the European Central Bank.</p>
+        <div class="tool-card-features">
+          <span>160+ world currencies</span>
+          <span>Live ECB & open exchange rates</span>
+          <span>Instant swap & copy result</span>
+          <span>Popular rate quick-view strip</span>
+        </div>
+        <div class="tool-card-link">Open converter →</div>
+      </a>
+
+      <a href="units.html" class="tool-card">
+        <div class="tool-card-icon">📐</div>
+        <h3>Unit Converter</h3>
+        <p>Convert between metric and imperial units across 9 categories — length, weight, temperature, volume, speed, area, data, pressure, and energy.</p>
+        <div class="tool-card-features">
+          <span>9 unit categories</span>
+          <span>Metric & imperial systems</span>
+          <span>Quick reference guide</span>
+          <span>Auto region detection</span>
+        </div>
+        <div class="tool-card-link">Open converter →</div>
+      </a>
+
+      <a href="time.html" class="tool-card">
+        <div class="tool-card-icon">🕰</div>
+        <h3>Time Zone Converter</h3>
+        <p>Convert times across any two time zones and track the world clock for 12 major cities — perfect for scheduling across continents.</p>
+        <div class="tool-card-features">
+          <span>65+ time zones</span>
+          <span>Live world clock</span>
+          <span>Date & time picker</span>
+          <span>DST automatically handled</span>
+        </div>
+        <div class="tool-card-link">Open converter →</div>
+      </a>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- WHO IS IT FOR -->
+  <div class="audience-section">
+    <div class="section-heading">
+      <div class="label">Who It's For</div>
+      <h2>Built for everyone</h2>
+      <p>Whether you're travelling, working, studying, or building something — Convertersolutions has you covered.</p>
+    </div>
+
+    <div class="audience-grid">
+      <div class="audience-card">
+        <span class="audience-icon">✈️</span>
+        <h4>Travellers</h4>
+        <p>Check currency rates before you exchange money, convert km to miles, and figure out what time it is back home — all in seconds.</p>
+      </div>
+      <div class="audience-card">
+        <span class="audience-icon">💼</span>
+        <h4>Business Professionals</h4>
+        <p>Price products in multiple currencies, schedule international meetings across time zones, and convert units for global clients.</p>
+      </div>
+      <div class="audience-card">
+        <span class="audience-icon">🎓</span>
+        <h4>Students</h4>
+        <p>Convert units for science and maths homework, check historical exchange rates for economics assignments, and study global time differences.</p>
+      </div>
+      <div class="audience-card">
+        <span class="audience-icon">🛒</span>
+        <h4>Online Shoppers</h4>
+        <p>Instantly see what a price in USD, EUR, or GBP means in your local currency before you checkout from international stores.</p>
+      </div>
+      <div class="audience-card">
+        <span class="audience-icon">👩‍💻</span>
+        <h4>Developers & Freelancers</h4>
+        <p>Quote clients in their currency, convert data sizes, and coordinate across time zones when working with remote teams worldwide.</p>
+      </div>
+      <div class="audience-card">
+        <span class="audience-icon">🍳</span>
+        <h4>Home Cooks</h4>
+        <p>Easily convert cups to millilitres, ounces to grams, and Fahrenheit to Celsius when cooking recipes from other countries.</p>
+      </div>
+      <div class="audience-card">
+        <span class="audience-icon">🏗️</span>
+        <h4>Engineers & Tradespeople</h4>
+        <p>Convert pressure, energy, area, and speed units across metric and imperial systems quickly and accurately on the job.</p>
+      </div>
+      <div class="audience-card">
+        <span class="audience-icon">🌍</span>
+        <h4>Expats & Remote Workers</h4>
+        <p>Keep track of exchange rates for sending money home, schedule calls with family, and stay on top of two different time zones.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- WHY US -->
+  <div class="why-section">
+    <div class="section-heading">
+      <div class="label">Why Convertersolutions</div>
+      <h2>Fast, free, and reliable</h2>
+      <p>We built the tool we always wished existed — no clutter, no sign-ups, just accurate conversions.</p>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-item">
+        <div class="why-num">01</div>
+        <div>
+          <h4>Always free, no account needed</h4>
+          <p>Every feature is available to everyone, instantly. No registration, no paywalls, no limits.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">02</div>
+        <div>
+          <h4>Live data from trusted sources</h4>
+          <p>Currency rates pull from the European Central Bank, Open Exchange Rates, and community CDNs — always up to date.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">03</div>
+        <div>
+          <h4>Works on any device</h4>
+          <p>Fully responsive design that works beautifully on phones, tablets, and desktops without any app download needed.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">04</div>
+        <div>
+          <h4>Region-aware defaults</h4>
+          <p>Select your region and the tool automatically sets your local currency, preferred unit system, and nearest time zone.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">05</div>
+        <div>
+          <h4>Your data stays with you</h4>
+          <p>No personal data is collected or sent to our servers. Your region preference is stored in your browser only.</p>
+        </div>
+      </div>
+      <div class="why-item">
+        <div class="why-num">06</div>
+        <div>
+          <h4>160+ currencies, 9 unit types</h4>
+          <p>One of the most comprehensive coverage sets available — from the Afghan Afghani to the Zimbabwean Dollar.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM CTA -->
+  <div class="home-cta">
+    <div class="home-cta-inner">
+      <h2>Ready to start converting?</h2>
+      <p>Pick a tool below and get your answer in seconds — no sign-up required.</p>
+      <div class="hero-cta-row">
+        <a href="currency.html" class="btn-primary">💱 Currency</a>
+        <a href="units.html" class="btn-secondary">📐 Units</a>
+        <a href="time.html" class="btn-secondary">🕰 Time Zones</a>
+      </div>
+    </div>
+  </div>
+
 </main>
 
 <footer>
   <div>
-    <div style="font-family:'Manrope',serif;font-size:1.1rem;font-weight:600;margin-bottom:4px;">Convertersolutions</div>
+    <div class="footer-logo">Convertersolutions</div>
     <div>© 2025 Convertersolutions. Currency data via jsDelivr CDN · Frankfurter (ECB) · Open Exchange Rates.</div>
   </div>
   <nav class="footer-links" aria-label="Footer navigation">
@@ -376,7 +676,6 @@
     <a href="about.html">About</a>
   </nav>
 </footer>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-<script src="script.js"></script>
+
 </body>
 </html>

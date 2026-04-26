@@ -109,11 +109,14 @@ function applyRegion() {
   const r = REGIONS[code];
   document.getElementById('regionFlag').textContent = r.flag;
   const toSel = document.getElementById('currTo');
-  if (toSel.querySelector(`option[value="${r.currency}"]`)) toSel.value = r.currency;
-  document.getElementById('unitSystemLabel').textContent = `System: ${r.system === 'metric' ? 'Metric (SI)' : 'Imperial / US Customary'}`;
-  buildUnitSelects(r.system);
-  convertCurrency();
-  updateWorldClock();
+  if (toSel) {
+    if (toSel.querySelector(`option[value="${r.currency}"]`)) toSel.value = r.currency;
+    convertCurrency();
+  }
+  const systemLabel = document.getElementById('unitSystemLabel');
+  if (systemLabel) systemLabel.textContent = `System: ${r.system === 'metric' ? 'Metric (SI)' : 'Imperial / US Customary'}`;
+  if (document.getElementById('unitCategories')) buildUnitSelects(r.system);
+  if (document.getElementById('worldClock')) updateWorldClock();
 }
 
 // ══════════════════════════════════════════
@@ -836,8 +839,10 @@ function convertTime() {
 }
 
 function updateWorldClock() {
+  const clockEl = document.getElementById('worldClock');
+  if (!clockEl) return;                          // safe to call from any page
   const now = new Date();
-  document.getElementById('worldClock').innerHTML = WORLD_CLOCK_TZS.map(({city,tz}) => {
+  clockEl.innerHTML = WORLD_CLOCK_TZS.map(({city,tz}) => {
     const time = now.toLocaleTimeString('en-US', {timeZone:tz, hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false});
     const date = now.toLocaleDateString('en-GB',  {timeZone:tz, weekday:'short', day:'numeric', month:'short'});
     const offsetDate = new Date(now.toLocaleString('en-US', {timeZone:tz}));
@@ -851,7 +856,8 @@ function updateWorldClock() {
       <div class="tz-date">${date} <span class="sr-only">(${offsetStr})</span></div>
     </div>`;
   }).join('');
-  document.getElementById('clockTick').textContent =
+  const tickEl = document.getElementById('clockTick');
+  if (tickEl) tickEl.textContent =
     `· ${now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'})} local`;
 }
 
@@ -859,15 +865,29 @@ function updateWorldClock() {
 //  INIT
 // ══════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', () => {
-  populateCurrencySelects();
-  fetchRates();
-  buildCategoryTabs();
-  buildUnitSelects('imperial');
-  populateTzSelects();
-  updateWorldClock();
+  // Currency — only on pages that have the currency UI
+  if (document.getElementById('currFrom')) {
+    populateCurrencySelects();
+    fetchRates();
+  }
 
+  // Units — units.html and the main index tab
+  if (document.getElementById('unitCategories')) {
+    buildCategoryTabs();
+    buildUnitSelects(REGIONS[currentRegion]?.system || 'imperial');
+  }
+
+  // Time — time.html and the main index tab
+  if (document.getElementById('tzFrom')) populateTzSelects();
+  if (document.getElementById('worldClock')) updateWorldClock();
+
+  // World-clock ticker — updateWorldClock() is self-guarding (no-ops when
+  // #worldClock is absent), so it's safe to call unconditionally.
+  // On the tabbed main page we still honour the active-panel check to avoid
+  // off-screen reflows; on standalone pages (no panel-time) it always ticks.
   setInterval(() => {
-    if (document.getElementById('panel-time').classList.contains('active')) updateWorldClock();
+    const timePanel = document.getElementById('panel-time');
+    if (!timePanel || timePanel.classList.contains('active')) updateWorldClock();
   }, 1000);
 });
 

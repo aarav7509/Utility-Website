@@ -1586,3 +1586,44 @@ h2 {
   nav a:not(.nav-cta) { display: none; }
   .cta-block { flex-direction: column; align-items: flex-start; }
 }
+/*Currency*/
+
+.nav-links { display: flex; gap: 8px; align-items: center; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 0.88rem; font-weight: 500; padding: 7px 14px; border-radius: 20px; transition: all 0.2s; }
+.nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.nav-links a.active { color: var(--accent2); background: rgba(201,168,76,0.08); }
+.tool-page-hero { text-align: center; padding: 56px 24px 48px; max-width: 700px; margin: 0 auto; }
+.tool-page-hero .eyebrow { display: inline-flex; align-items: center; gap: 7px; background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 40px; padding: 5px 14px; font-size: 0.72rem; font-weight: 600; color: var(--accent2); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px; }
+.tool-page-hero h1 { font-family: 'Manrope', serif; font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 700; letter-spacing: -1px; margin-bottom: 12px; }
+.tool-page-hero h1 em { font-style: italic; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.tool-page-hero p { color: var(--muted); font-size: 1rem; line-height: 1.65; }
+.tool-content { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+@media (max-width: 600px) { .nav-links { display: none; } .tool-page-hero { padding: 40px 24px 36px; } }
+
+/*Time Page*/
+
+.nav-links { display: flex; gap: 8px; align-items: center; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 0.88rem; font-weight: 500; padding: 7px 14px; border-radius: 20px; transition: all 0.2s; }
+.nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.nav-links a.active { color: var(--accent2); background: rgba(201,168,76,0.08); }
+.tool-page-hero { text-align: center; padding: 56px 24px 48px; max-width: 700px; margin: 0 auto; }
+.tool-page-hero .eyebrow { display: inline-flex; align-items: center; gap: 7px; background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 40px; padding: 5px 14px; font-size: 0.72rem; font-weight: 600; color: var(--accent2); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px; }
+.tool-page-hero h1 { font-family: 'Manrope', serif; font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 700; letter-spacing: -1px; margin-bottom: 12px; }
+.tool-page-hero h1 em { font-style: italic; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.tool-page-hero p { color: var(--muted); font-size: 1rem; line-height: 1.65; }
+.tool-content { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+@media (max-width: 600px) { .nav-links { display: none; } .tool-page-hero { padding: 40px 24px 36px; } }
+
+/*Units Page*/
+
+.nav-links { display: flex; gap: 8px; align-items: center; }
+.nav-links a { color: var(--muted); text-decoration: none; font-size: 0.88rem; font-weight: 500; padding: 7px 14px; border-radius: 20px; transition: all 0.2s; }
+.nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+.nav-links a.active { color: var(--accent2); background: rgba(201,168,76,0.08); }
+.tool-page-hero { text-align: center; padding: 56px 24px 48px; max-width: 700px; margin: 0 auto; }
+.tool-page-hero .eyebrow { display: inline-flex; align-items: center; gap: 7px; background: rgba(201,168,76,0.08); border: 1px solid rgba(201,168,76,0.2); border-radius: 40px; padding: 5px 14px; font-size: 0.72rem; font-weight: 600; color: var(--accent2); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 20px; }
+.tool-page-hero h1 { font-family: 'Manrope', serif; font-size: clamp(2.2rem, 5vw, 3.6rem); font-weight: 700; letter-spacing: -1px; margin-bottom: 12px; }
+.tool-page-hero h1 em { font-style: italic; background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.tool-page-hero p { color: var(--muted); font-size: 1rem; line-height: 1.65; }
+.tool-content { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
+@media (max-width: 600px) { .nav-links { display: none; } .tool-page-hero { padding: 40px 24px 36px; } }

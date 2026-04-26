@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Currency Converter — Convertersolutions</title>
+<meta name="description" content="Convert between 160+ world currencies with live mid-market exchange rates from the European Central Bank and Open Exchange Rates.">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="copy-toast" id="copyToast" role="status" aria-live="polite">✓ Copied to clipboard</div>
+
+<header>
+  <a href="index.html" class="logo">
+    <div class="logo-icon" aria-hidden="true"><img src="preview.png" alt="" width="22" height="22"></div>
+    <span>Converter<span>solutions</span></span>
+  </a>
+  <nav class="nav-links" aria-label="Main navigation">
+    <a href="currency.html" class="active">💱 Currency</a>
+    <a href="units.html">📐 Units</a>
+    <a href="time.html">🕰 Time</a>
+    <a href="about.html">About</a>
+  </nav>
+  <div class="region-wrapper">
+    <span class="region-flag" id="regionFlag" aria-hidden="true">🌍</span>
+    <select id="regionSelect" onchange="applyRegion()" aria-label="Select region">
+      <option value="US">🇺🇸 United States</option>
+      <option value="GB">🇬🇧 United Kingdom</option>
+      <option value="EU">🇪🇺 European Union</option>
+      <option value="CA">🇨🇦 Canada</option>
+      <option value="AU">🇦🇺 Australia</option>
+      <option value="IN">🇮🇳 India</option>
+      <option value="JP">🇯🇵 Japan</option>
+      <option value="CN">🇨🇳 China</option>
+      <option value="BR">🇧🇷 Brazil</option>
+      <option value="MX">🇲🇽 Mexico</option>
+      <option value="AE">🇦🇪 UAE</option>
+      <option value="SG">🇸🇬 Singapore</option>
+      <option value="ZA">🇿🇦 South Africa</option>
+      <option value="KR">🇰🇷 South Korea</option>
+      <option value="NG">🇳🇬 Nigeria</option>
+      <option value="PK">🇵🇰 Pakistan</option>
+      <option value="BD">🇧🇩 Bangladesh</option>
+      <option value="TR">🇹🇷 Turkey</option>
+      <option value="ID">🇮🇩 Indonesia</option>
+      <option value="SA">🇸🇦 Saudi Arabia</option>
+      <option value="AR">🇦🇷 Argentina</option>
+      <option value="EG">🇪🇬 Egypt</option>
+      <option value="TH">🇹🇭 Thailand</option>
+      <option value="MY">🇲🇾 Malaysia</option>
+      <option value="PH">🇵🇭 Philippines</option>
+      <option value="KE">🇰🇪 Kenya</option>
+      <option value="GH">🇬🇭 Ghana</option>
+      <option value="MA">🇲🇦 Morocco</option>
+      <option value="PE">🇵🇪 Peru</option>
+      <option value="VN">🇻🇳 Vietnam</option>
+    </select>
+  </div>
+</header>
+
+<main>
+  <div class="tool-page-hero">
+    <div class="eyebrow">Live exchange rates</div>
+    <h1>Currency <em>Converter</em></h1>
+    <p>Mid-market rates for 160+ currencies, updated in real time from trusted sources including the European Central Bank.</p>
+  </div>
+
+  <div class="tool-content">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">
+          <div class="icon-badge" aria-hidden="true">💱</div>
+          Currency Converter
+          <span class="currency-count-badge" id="currencyCountBadge">— currencies</span>
+        </div>
+        <div class="card-subtitle" id="rateTimestamp">Fetching live exchange rates…</div>
+      </div>
+
+      <div class="notice-bar" role="status" aria-live="polite">
+        <div class="dot" aria-hidden="true"></div>
+        <span id="rateStatus">Loading rates from multiple sources…</span>
+      </div>
+
+      <div class="currency-search-row">
+        <div>
+          <label for="searchFrom" style="display:block;font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-weight:500;">Search From Currency</label>
+          <input type="text" class="currency-search-input" id="searchFrom" placeholder="e.g. USD, Euro, dollar…" oninput="filterCurrencies('from')">
+        </div>
+        <div>
+          <label for="searchTo" style="display:block;font-size:0.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px;font-weight:500;">Search To Currency</label>
+          <input type="text" class="currency-search-input" id="searchTo" placeholder="e.g. EUR, Pound, yen…" oninput="filterCurrencies('to')">
+        </div>
+      </div>
+
+      <div class="converter-row">
+        <div class="field-group">
+          <label for="currAmount">Amount &amp; From</label>
+          <div class="field-inner">
+            <select class="currency-select" id="currFrom" aria-label="From currency" onchange="convertCurrency(); syncSearchFromSelect()"></select>
+            <input type="number" id="currAmount" value="100" min="0" step="any" placeholder="0.00" oninput="convertCurrency()">
+          </div>
+        </div>
+        <button class="swap-btn" onclick="swapCurrency()" aria-label="Swap currencies">⇄</button>
+        <div class="field-group">
+          <label for="currTo">To Currency</label>
+          <div class="field-inner">
+            <select class="currency-select" id="currTo" aria-label="To currency" onchange="convertCurrency(); syncSearchToSelect()"></select>
+            <input type="number" id="currResult" placeholder="—" readonly aria-label="Conversion result" style="color:var(--accent2)">
+          </div>
+        </div>
+      </div>
+
+      <div class="result-box" id="currResultBox" style="display:none" aria-live="polite">
+        <button class="copy-btn" id="copyCurrBtn" onclick="copyResult('currResultLarge', 'copyCurrBtn')" aria-label="Copy conversion result">⎘</button>
+        <div class="result-label">Converted Amount</div>
+        <div class="result-value" id="currResultLarge" aria-live="polite">—</div>
+        <div class="result-subtext" id="currResultSub">—</div>
+      </div>
+
+      <button class="convert-btn" onclick="convertCurrency()">Convert Now</button>
+      <div class="rate-strip" id="popularRates" aria-label="Popular exchange rates"></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div>
+    <div class="footer-logo">Convertersolutions</div>
+    <div>© 2025 Convertersolutions. Currency data via jsDelivr CDN · Frankfurter (ECB) · Open Exchange Rates.</div>
+  </div>
+  <nav class="footer-links" aria-label="Footer navigation">
+    <a href="privacy-policy.html">Privacy Policy</a>
+    <a href="terms-of-use.html">Terms of Use</a>
+    <a href="about.html">About</a>
+  </nav>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
