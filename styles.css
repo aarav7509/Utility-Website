@@ -788,6 +788,12 @@ main {
   margin-bottom: 24px;
 }
 
+/* CRITICAL: min-width: 0 prevents grid children from overflowing the card */
+.field-group {
+  min-width: 0;
+  overflow: hidden;
+}
+
 .field-group label {
   display: block;
   font-size: 0.75rem;
@@ -806,6 +812,8 @@ main {
   align-items: center;
   overflow: hidden;
   transition: border-color 0.2s, box-shadow 0.2s;
+  min-width: 0;
+  width: 100%;
 }
 
 .field-inner:focus-within {
@@ -835,10 +843,14 @@ main {
 .currency-select {
   font-size: 0.85rem;
   font-weight: 600;
-  min-width: 90px;
+  min-width: 80px;
+  max-width: 120px;
   border-right: 1px solid var(--border);
-  padding-right: 12px;
+  padding-right: 8px;
   cursor: pointer;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .swap-btn {
@@ -1136,30 +1148,75 @@ main {
 
 .hm-tbl-wrap {
   overflow-x: auto;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(201,168,76,0.18);
   border-radius: var(--radius-sm);
   margin-bottom: 32px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3), inset 0 1px 0 rgba(201,168,76,0.08);
+  background: var(--surface);
 }
 
-.hm-table { width: 100%; border-collapse: collapse; font-size: 0.84rem; table-layout: fixed; }
+.hm-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.88rem;
+  table-layout: auto;
+}
+
+.hm-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
 
 .hm-table thead th {
-  background: var(--surface2);
-  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(201,168,76,0.14) 0%, rgba(201,168,76,0.04) 100%);
+  padding: 13px 20px;
   text-align: left;
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--accent);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  border-bottom: 1px solid var(--border);
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid rgba(201,168,76,0.2);
   white-space: nowrap;
 }
 
-.hm-table tbody tr { border-bottom: 1px solid var(--border); transition: background 0.15s; }
-.hm-table tbody tr:last-child { border-bottom: none; }
-.hm-table tbody tr:hover { background: var(--surface2); }
-.hm-table tbody td { padding: 11px 14px; vertical-align: middle; color: var(--text); }
+.hm-table thead th:last-child { text-align: right; }
+
+.hm-table tbody tr {
+  transition: background 0.15s;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.hm-table tbody tr:last-child td { border-bottom: none; }
+
+.hm-table tbody tr:nth-child(even) { background: rgba(255,255,255,0.018); }
+
+.hm-table tbody tr:hover { background: rgba(201,168,76,0.06); }
+
+.hm-table tbody td {
+  padding: 13px 20px;
+  vertical-align: middle;
+  color: var(--text);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+
+.hm-table tbody td:first-child {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text);
+  letter-spacing: 0.01em;
+}
+
+.hm-table tbody td:last-child {
+  text-align: right;
+  font-family: 'Manrope', serif;
+  font-weight: 700;
+  font-size: 1.0rem;
+  color: var(--accent2);
+  letter-spacing: -0.2px;
+}
 
 .hm-rank      { font-weight: 600; color: var(--muted); font-size: 0.78rem; }
 .hm-tool-link { color: var(--accent2); text-decoration: none; font-weight: 600; }
@@ -2015,3 +2072,50 @@ h2 {
 .tool-page-hero p { color: var(--muted); font-size: 1rem; line-height: 1.65; }
 .tool-content { max-width: 860px; margin: 0 auto; padding: 0 24px 80px; }
 @media (max-width: 600px) { .nav-links { display: none; } .tool-page-hero { padding: 40px 24px 36px; } }
+/* ── CURRENCY DASHBOARD ADDITIONS ── */
+
+/* Dashboard control row (base currency + amount selectors) */
+.row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.row > div {
+  flex: 1;
+  min-width: 140px;
+}
+
+/* Chart canvas spacing */
+#chart {
+  margin: 24px 0;
+  border-radius: var(--radius-sm);
+  max-width: 100%;
+}
+
+/* Dashboard card title spacing */
+.card .card-title + h3.card-title {
+  margin-top: 8px;
+  font-size: 1.1rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* Responsive: stack converter row on narrow screens */
+@media (max-width: 540px) {
+  .converter-row {
+    grid-template-columns: 1fr;
+  }
+  .swap-btn {
+    transform: rotate(90deg);
+    margin: 0 auto;
+  }
+  .row {
+    flex-direction: column;
+  }
+  .row > div {
+    width: 100%;
+  }
+}
