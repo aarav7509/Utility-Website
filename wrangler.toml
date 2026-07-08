@@ -1,0 +1,7 @@
+name = "billowing-credit-f494"
+compatibility_date = "2026-07-08"
+
+# Serves this folder's static files (index.html, *.css, *.js) directly.
+# No separate Worker script needed for a plain static site.
+[assets]
+directory = "./"
